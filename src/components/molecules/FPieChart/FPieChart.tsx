@@ -1,3 +1,4 @@
+import { legendClasses } from "@mui/x-charts/ChartsLegend";
 import { PieChart } from "@mui/x-charts/PieChart";
 
 export function FPieChart() {
@@ -11,11 +12,26 @@ export function FPieChart() {
             { id: 2, value: 30, label: "Previdência Privada" },
             { id: 3, value: 30, label: "Bolsa de Valores" },
           ],
-          cx: "30%",
         },
       ]}
-      width={600}
-      height={250}
+      height={200}
+      slotProps={{
+        legend: {
+          position: {
+            vertical: "middle",
+            horizontal: "start",
+          },
+          sx: {
+            fontSize: 16,
+            color: "#fff",
+            gap: "24px",
+            [`.${legendClasses.mark}`]: {
+              height: 20,
+              width: 20,
+            },
+          },
+        },
+      }}
     />
   );
 }

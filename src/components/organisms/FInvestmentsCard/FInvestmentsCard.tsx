@@ -1,8 +1,8 @@
 import { FInvestmentStat } from "@/components/atoms/FInvestmentStat/FInvestmentStat";
 import { FCard } from "@/components/molecules/FCard/FCard";
 import { FPieChart } from "@/components/molecules/FPieChart/FPieChart";
-import { Box, Grid, Typography } from "@mui/material";
 import styles from "@/components/organisms/FInvestmentsCard/FInvestmentsCard.styles";
+import { Box, Grid, Typography } from "@mui/material";
 
 interface FInvestmentsCardProps {
   children?: React.ReactNode[];
@@ -52,43 +52,40 @@ export function FInvestmentsCard({ children }: FInvestmentsCardProps) {
             columns={12}
             sx={{ marginTop: 4, marginBottom: 8 }}
           >
-            <Grid size={{ xs: 12, sm: 6, md: 6 }} component="div">
+            <Grid
+              size={{ xs: 12, sm: 4, md: 4 }}
+              display="flex"
+              flexDirection="column"
+              gap={2}
+              component="div"
+            >
               <FInvestmentStat
                 label="Renda Fixa"
                 value="R$ 36.000,00"
                 backgroundColor="#004D61"
               />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 6 }} component="div">
               <FInvestmentStat
                 label="Renda Variável"
                 value="R$ 14.000,00"
                 backgroundColor="#004D61"
               />
             </Grid>
-          </Grid>
-        </Box>
-        <Box>
-          <Typography variant="h6">Estatisticas</Typography>
-          <Grid
-            container
-            spacing={2}
-            columns={12}
-            sx={{ marginTop: 2, marginBottom: 2 }}
-          >
-            <Grid size={{ xs: 12, sm: 12, md: 12 }} component="div">
+            <Grid size={{ xs: 12, sm: 8, md: 8 }} component="div">
               <Box
                 sx={{
                   width: "100%",
-                  minHeight: "300px",
                   display: "flex",
+                  color: "#fff",
                   justifyContent: "center",
-                  flexDirection: { xs: "column", sm: "row" },
+                  flexDirection: "column",
                   alignItems: "center",
+                  gap: "24px",
                   borderRadius: "8px",
                   backgroundColor: "#004D61",
+                  padding: "24px",
                 }}
               >
+                <Typography variant="h6">Estatísticas</Typography>
                 <FPieChart />
               </Box>
             </Grid>

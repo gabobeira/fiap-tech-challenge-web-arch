@@ -4,44 +4,45 @@ import {
   MenuItem,
   MenuList,
   MenuListProps,
+  Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
 
-export type FMenuListItem = {
+export type FMenuListItem<T> = {
   label: string;
   path: string;
+  view: T;
   current?: boolean;
 };
 
 type MenuVariant = "column" | "row";
 
-interface FMenuListProps {
+interface FMenuListProps<T> {
   options?: MenuListProps;
   variant?: MenuVariant;
-  menuItems: FMenuListItem[];
-  children: React.ReactElement;
+  menuItems: FMenuListItem<T>[];
+  itemClick: (path: T) => void;
 }
 
-export function FMenuList({
+export function FMenuList<T>({
   options,
   variant = "column",
   menuItems,
-  children,
-}: FMenuListProps) {
+  itemClick,
+}: FMenuListProps<T>) {
   const isDarkTheme = useTheme().palette.mode === "dark";
 
   return (
     <MenuList {...options}>
-      {menuItems.map(({ label, path, current }, index) => (
+      {menuItems.map(({ label, current, view }, index) => (
         <Box key={`menu-item-${index}`}>
           <MenuItem
             key={`menu-item-${index}`}
             sx={{ justifyContent: "center" }}
+            onClick={() => itemClick(view)}
           >
-            {React.cloneElement(children, {
-              href: path,
-              style: {
+            <Typography
+              style={{
                 color: current
                   ? "var(--mui-palette-tertiary-main)"
                   : isDarkTheme
@@ -49,9 +50,11 @@ export function FMenuList({
                     : "currentColor",
                 fontWeight: variant === "row" ? 600 : current ? 700 : 400,
                 textDecoration: "none",
-              },
-              children: label,
-            })}
+                textTransform: "capitalize",
+              }}
+            >
+              {label}
+            </Typography>
           </MenuItem>
           <Divider
             sx={{

@@ -4,7 +4,6 @@ import {
   FCard,
   FInvestmentsCard,
   FMenuList,
-  FMenuListItem,
   FModal,
   FTransactionForm,
   FTransactionFormCard,
@@ -13,6 +12,7 @@ import {
   FTransactionListCard,
   TransactionItem,
 } from "@/components";
+import { DashboardView, MENU_ITEMS_DASHBOARD } from "@/constants/menuItems";
 import { Account } from "@/services/Account/Account.model";
 import {
   Transaction,
@@ -26,12 +26,10 @@ import {
 } from "@/utils/formatters";
 import { Container, Grid } from "@mui/material";
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface AccountDashboardProps {
-  menuItems: FMenuListItem[];
   account: Account;
   transactionList: Transaction[];
   getInitialData: () => void;
@@ -41,7 +39,6 @@ interface AccountDashboardProps {
 }
 
 export default function AccountDashboard({
-  menuItems,
   account,
   transactionList,
   getInitialData,
@@ -49,6 +46,7 @@ export default function AccountDashboard({
   submitEditTransaction,
   submitDeleteTransaction,
 }: AccountDashboardProps) {
+  const [view, setView] = useState<DashboardView>("summary");
   const loadData = async () => {
     getInitialData();
   };
@@ -57,16 +55,11 @@ export default function AccountDashboard({
     loadData();
   }, []);
 
-  // const accountUpdatedEvent = new CustomEvent("dashboardApp: accountUpdated", {
-  //   detail: account.fullName,
-  // });
-  // document.dispatchEvent(accountUpdatedEvent);
-
   const formattedBalance = formatCurrency(account.balance, account.currency);
   const formattedDate = getFormattedDateNow();
   const pathname = usePathname();
 
-  const currentMenuItems = menuItems.map((item) => ({
+  const currentMenuItems = MENU_ITEMS_DASHBOARD.map((item) => ({
     ...item,
     current: item.path === pathname,
   }));
@@ -139,53 +132,76 @@ export default function AccountDashboard({
                 },
               }}
             >
-              <FMenuList menuItems={currentMenuItems}>
-                <Link href="" />
-              </FMenuList>
+              <FMenuList<DashboardView>
+                menuItems={currentMenuItems}
+                itemClick={(path) => setView(path)}
+              />
             </FCard>
           </Grid>
-
-          <Grid
-            size={{ xs: 12, lg: 6 }}
-            display="flex"
-            flexDirection="column"
-            gap={3}
-          >
-            <FAccountSummaryCard
-              firstName={account.firstName}
-              currency={account.currency}
-              balance={formattedBalance}
-              date={formattedDate}
+          {view === "summary" ? (
+            <Grid
+              size={{ xs: 12, lg: 10 }}
+              display="flex"
+              flexDirection="column"
+              gap={3}
             >
-              <Image src="/assets/card-pixels-2.svg" alt="" fill />
-              <Image src="/assets/card-pixels-1.svg" alt="" fill />
-              <Image src="/assets/card-illustration-1.svg" alt="" fill />
-            </FAccountSummaryCard>
-            <FTransactionFormCard
-              addTransaction={handleAddTransaction}
-              accountBalance={account.balance}
-            >
-              <Image src="/assets/card-pixels-3.svg" alt="" layout="fill" />
-              <Image src="/assets/card-pixels-4.svg" alt="" layout="fill" />
-              <Image
-                src="/assets/card-illustration-2.svg"
-                alt=""
-                layout="fill"
-              />
-            </FTransactionFormCard>
-            <FInvestmentsCard>
-              <Image src="/assets/card-pixels-3.svg" alt="" layout="fill" />
-              <Image src="/assets/card-pixels-4.svg" alt="" layout="fill" />
-            </FInvestmentsCard>
-          </Grid>
+              <FAccountSummaryCard
+                firstName={account.firstName}
+                currency={account.currency}
+                balance={formattedBalance}
+                date={formattedDate}
+              >
+                <Image src="/assets/card-pixels-2.svg" alt="" fill />
+                <Image src="/assets/card-pixels-1.svg" alt="" fill />
+                <Image src="/assets/card-illustration-1.svg" alt="" fill />
+              </FAccountSummaryCard>
+            </Grid>
+          ) : null}
 
-          <Grid size={{ xs: 12, lg: 4 }}>
-            <FTransactionListCard
-              transactionItems={formattedTransactions}
-              editTransaction={openEditModal}
-              deleteTransaction={submitDeleteTransaction}
-            />
-          </Grid>
+          {view === "investments" ? (
+            <Grid
+              size={{ xs: 12, lg: 10 }}
+              display="flex"
+              flexDirection="column"
+              gap={3}
+            >
+              <FInvestmentsCard>
+                <Image src="/assets/card-pixels-3.svg" alt="" layout="fill" />
+                <Image src="/assets/card-pixels-4.svg" alt="" layout="fill" />
+              </FInvestmentsCard>
+            </Grid>
+          ) : null}
+
+          {view === "transactions" ? (
+            <>
+              <Grid
+                size={{ xs: 12, lg: 6 }}
+                display="flex"
+                flexDirection="column"
+                gap={3}
+              >
+                <FTransactionFormCard
+                  addTransaction={handleAddTransaction}
+                  accountBalance={account.balance}
+                >
+                  <Image src="/assets/card-pixels-3.svg" alt="" layout="fill" />
+                  <Image src="/assets/card-pixels-4.svg" alt="" layout="fill" />
+                  <Image
+                    src="/assets/card-illustration-2.svg"
+                    alt=""
+                    layout="fill"
+                  />
+                </FTransactionFormCard>
+              </Grid>
+              <Grid size={{ xs: 12, lg: 4 }}>
+                <FTransactionListCard
+                  transactionItems={formattedTransactions}
+                  editTransaction={openEditModal}
+                  deleteTransaction={submitDeleteTransaction}
+                />
+              </Grid>
+            </>
+          ) : null}
         </Grid>
         <FModal
           title="Editar transação"

@@ -29,7 +29,7 @@ export function FAccountSummary(props: FAccountSummaryProps) {
           {isBalanceVisible ? <VisibilityTwoTone /> : <VisibilityOffTwoTone />}
         </FIconButton>
       </Stack>
-      <Divider sx={{ width: 180, bgcolor: "#FF5031" }}></Divider>
+      <Divider sx={{ width: 180, bgcolor: "#FF5031" }} />
       <Typography
         variant="body1"
         fontWeight={400}

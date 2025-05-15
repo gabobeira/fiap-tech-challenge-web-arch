@@ -1,6 +1,5 @@
 "use client";
 import { FHeader, FMenuDropdown } from "@/components";
-import { MENU_ITEMS_DASHBOARD } from "@/constants/menuItems";
 import { getAccountInfo } from "@/services/Account/Account.controller";
 import { Account } from "@/services/Account/Account.model";
 import {
@@ -97,7 +96,6 @@ export default function DashboardView() {
         }
       />
       <AccountDashboard
-        menuItems={MENU_ITEMS_DASHBOARD}
         account={localAccount}
         getInitialData={getInitialData}
         transactionList={localTransactions}
