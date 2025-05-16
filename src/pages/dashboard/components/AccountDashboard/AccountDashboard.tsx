@@ -28,6 +28,7 @@ import { Container, Grid } from "@mui/material";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { image } from "../../../../../public/assets/image";
 
 interface AccountDashboardProps {
   account: Account;
@@ -151,9 +152,9 @@ export default function AccountDashboard({
                 balance={formattedBalance}
                 date={formattedDate}
               >
-                <Image src="/assets/card-pixels-2.svg" alt="" fill />
-                <Image src="/assets/card-pixels-1.svg" alt="" fill />
-                <Image src="/assets/card-illustration-1.svg" alt="" fill />
+                <Image src={`${image}/card-pixels-2.svg`} alt="" fill />
+                <Image src={`${image}/card-pixels-1.svg`} alt="" fill />
+                <Image src={`${image}/card-illustration-1.svg`} alt="" fill />
               </FAccountSummaryCard>
             </Grid>
           ) : null}
@@ -166,8 +167,16 @@ export default function AccountDashboard({
               gap={3}
             >
               <FInvestmentsCard>
-                <Image src="/assets/card-pixels-3.svg" alt="" layout="fill" />
-                <Image src="/assets/card-pixels-4.svg" alt="" layout="fill" />
+                <Image
+                  src={`${image}/card-pixels-3.svg`}
+                  alt=""
+                  layout="fill"
+                />
+                <Image
+                  src={`${image}/card-pixels-4.svg`}
+                  alt=""
+                  layout="fill"
+                />
               </FInvestmentsCard>
             </Grid>
           ) : null}
@@ -184,10 +193,18 @@ export default function AccountDashboard({
                   addTransaction={handleAddTransaction}
                   accountBalance={account.balance}
                 >
-                  <Image src="/assets/card-pixels-3.svg" alt="" layout="fill" />
-                  <Image src="/assets/card-pixels-4.svg" alt="" layout="fill" />
                   <Image
-                    src="/assets/card-illustration-2.svg"
+                    src={`${image}/card-pixels-3.svg`}
+                    alt=""
+                    layout="fill"
+                  />
+                  <Image
+                    src={`${image}/card-pixels-4.svg`}
+                    alt=""
+                    layout="fill"
+                  />
+                  <Image
+                    src={`${image}/card-illustration-2.svg`}
                     alt=""
                     layout="fill"
                   />

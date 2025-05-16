@@ -17,6 +17,7 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { image } from "../../public/assets/image";
 
 export const getStaticProps: GetStaticProps = async () => {
   const menuItems = MENU_ITEMS_LANDING.map((item) => ({
@@ -64,7 +65,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
               }}
             >
               <Image
-                src="/assets/logo.svg"
+                src={`${image}/logo.svg`}
                 alt="logo Bytebank"
                 width={146}
                 height={32}
@@ -77,7 +78,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
               }}
             >
               <Image
-                src="/assets/logo-small.svg"
+                src={`${image}/logo-small.svg`}
                 alt="logo Bytebank pequeno"
                 width={27}
                 height={27}
@@ -123,7 +124,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
               }}
             >
               <Image
-                src="/assets/logo.svg"
+                src={`${image}/logo.svg`}
                 alt="logo Bytebank"
                 width={146}
                 height={32}
@@ -172,7 +173,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                 justifyContent={{ xs: "center", lg: "flex-end" }}
               >
                 <Image
-                  src="/assets/banner-illustration.svg"
+                  src={`${image}/banner-illustration.svg`}
                   alt=""
                   layout="responsive"
                   width={662}
@@ -200,7 +201,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                 description="Isso mesmo, nossa conta é digital, sem custo fixo e mais que isso: sem tarifa de manutenção."
               >
                 <Image
-                  src="/assets/GiftBox.svg"
+                  src={`${image}/GiftBox.svg`}
                   alt="Ícone de caixa de presente"
                   width="64"
                   height="64"
@@ -211,7 +212,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                 description="Você pode sacar gratuitamente 4x por mês de qualquer Banco 24h."
               >
                 <Image
-                  src="/assets/Exchange.svg"
+                  src={`${image}/Exchange.svg`}
                   alt="Ícone de mão entregando dinheiro"
                   width="64"
                   height="64"
@@ -222,7 +223,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                 description="Você pode acumular pontos com suas compras no crédito sem pagar mensalidade!"
               >
                 <Image
-                  src="/assets/Star.svg"
+                  src={`${image}/Star.svg`}
                   alt="Ícone de estrela"
                   width="64"
                   height="64"
@@ -233,7 +234,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                 description="Seus dispositivos móveis (computador e laptop) protegidos por uma mensalidade simbólica."
               >
                 <Image
-                  src="/assets/Devices.svg"
+                  src={`${image}/Devices.svg`}
                   alt="Ícone de diversas telas de diferentes dispositivos"
                   width="64"
                   height="64"
@@ -244,7 +245,12 @@ export default function LandingView({ menuItems }: LandingViewProps) {
         </Container>
 
         <FFooter>
-          <Image src="/assets/logo-white.svg" alt="" width={145} height={32} />
+          <Image
+            src={`${image}/logo-white.svg`}
+            alt=""
+            width={145}
+            height={32}
+          />
         </FFooter>
       </main>
     </ThemeProviderWrapper>
