@@ -69,6 +69,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                 alt="logo Bytebank"
                 width={146}
                 height={32}
+                loading="lazy"
               />
             </Box>
             <Box
@@ -82,6 +83,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                 alt="logo Bytebank pequeno"
                 width={27}
                 height={27}
+                loading="lazy"
               />
             </Box>
             <FMenuDropdown
@@ -128,6 +130,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                 alt="logo Bytebank"
                 width={146}
                 height={32}
+                loading="lazy"
               />
             </Box>
           </Box>
@@ -178,6 +181,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                   layout="responsive"
                   width={662}
                   height={413}
+                  loading="lazy"
                 />
               </Grid>
             </Grid>
@@ -205,6 +209,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                   alt="Ícone de caixa de presente"
                   width="64"
                   height="64"
+                  loading="lazy"
                 />{" "}
               </FAdvantageColumn>
               <FAdvantageColumn
@@ -216,6 +221,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                   alt="Ícone de mão entregando dinheiro"
                   width="64"
                   height="64"
+                  loading="lazy"
                 />{" "}
               </FAdvantageColumn>
               <FAdvantageColumn
@@ -227,6 +233,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                   alt="Ícone de estrela"
                   width="64"
                   height="64"
+                  loading="lazy"
                 />{" "}
               </FAdvantageColumn>
               <FAdvantageColumn
@@ -238,6 +245,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
                   alt="Ícone de diversas telas de diferentes dispositivos"
                   width="64"
                   height="64"
+                  loading="lazy"
                 />{" "}
               </FAdvantageColumn>
             </FAdvantageContainer>
@@ -250,6 +258,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
             alt=""
             width={145}
             height={32}
+            loading="lazy"
           />
         </FFooter>
       </main>
