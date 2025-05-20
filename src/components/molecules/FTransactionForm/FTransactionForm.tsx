@@ -12,6 +12,7 @@ export interface FTransactionFormItemInput {
   value: number;
   fileBase64?: string;
   fileName?: string;
+  idAccount?: number;
 }
 
 export interface FTransactionFormItem extends FTransactionFormItemInput {
@@ -189,7 +190,9 @@ export function FTransactionForm({
         setFileBase64(base64String);
       };
       reader.readAsDataURL(file);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

@@ -13,6 +13,7 @@ export interface TransactionData {
   currency: string;
   fileBase64?: string;
   fileName?: string;
+  idAccount: number;
 }
 
 export class Transaction {
@@ -23,6 +24,7 @@ export class Transaction {
   readonly currency: string;
   readonly fileBase64?: string;
   readonly fileName?: string;
+  readonly idAccount: number;
 
   constructor(data: TransactionData) {
     this.id = data.id;
@@ -32,5 +34,6 @@ export class Transaction {
     this.currency = data.currency;
     this.fileBase64 = data.fileBase64;
     this.fileName = data.fileName;
+    this.idAccount = data.idAccount;
   }
 }

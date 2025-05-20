@@ -3,12 +3,15 @@ import {
   FAccountButtons,
   FAdvantageColumn,
   FAdvantageContainer,
+  FAlert,
   FFooter,
   FHeader,
   FMenuDropdown,
   FMenuList,
   FMenuListItem,
+  FModal,
 } from "@/components";
+import FLoginPage from "@/components/molecules/FLoginForm";
 import { dark } from "@/components/theme";
 import { MENU_ITEMS_LANDING } from "@/constants/menuItems";
 import ThemeProviderWrapper from "@/theme/ThemeProviderWrapper";
@@ -16,7 +19,7 @@ import { Box, Container, Grid, Link, Typography } from "@mui/material";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useState } from "react";
 import { image } from "../../public/assets/image";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -33,18 +36,27 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 interface LandingViewProps {
-  menuItems: FMenuListItem[];
+  menuItems: FMenuListItem<string>[];
 }
 
 export default function LandingView({ menuItems }: LandingViewProps) {
-  const router = useRouter();
+  const [isModalRegisteOpen, setIsModalRegisterOpen] = useState<boolean>(false);
+  const [isModalLoginOpen, setIsModalLoginOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+
+  // const router = useRouter();
 
   const actionsHome: FAccountButtonActions = {
     handleNewAccount: async () => {
-      router.push("/dashboard");
+      setIsModalRegisterOpen(true);
+
+      // router.push("/dashboard");
     },
     handleLogin: async () => {
-      router.push("/dashboard");
+      setIsModalLoginOpen(true);
+
+      // router.push("/dashboard");
     },
   };
 
@@ -252,7 +264,35 @@ export default function LandingView({ menuItems }: LandingViewProps) {
             height={32}
           />
         </FFooter>
+
+        <FModal
+          handleClose={() => setIsModalLoginOpen(false)}
+          isOpen={isModalLoginOpen}
+        >
+          <FLoginPage
+            handleAlertMessageChange={setAlertMessage}
+            handleOpenAlert={setShowAlert}
+          />
+        </FModal>
+
+        <FModal
+          handleClose={() => setIsModalRegisterOpen(false)}
+          isOpen={isModalRegisteOpen}
+        >
+          <FLoginPage
+            handleAlertMessageChange={setAlertMessage}
+            handleOpenAlert={setShowAlert}
+          />
+        </FModal>
       </main>
+      {alertMessage && (
+        <FAlert
+          severity="error"
+          text={alertMessage}
+          open={showAlert}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
     </ThemeProviderWrapper>
   );
 }

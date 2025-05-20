@@ -94,6 +94,7 @@ export default function AccountDashboard({
     const editedTransaction: TransactionData = {
       ...transaction,
       currency: "R$",
+      idAccount: 1,
       date: new Date().toISOString(),
     };
 

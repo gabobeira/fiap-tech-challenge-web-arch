@@ -27,6 +27,8 @@ export default function DashboardView() {
     firstName: "",
     balance: 0,
     currency: "",
+    id: 0,
+    idUser: 0,
   };
 
   const transactions: Transaction[] = [];
@@ -40,7 +42,7 @@ export default function DashboardView() {
   }
 
   async function fetchAccount() {
-    const updatedTransactions = await getAccountInfo();
+    const updatedTransactions = await getAccountInfo(1);
     setLocalAccount(updatedTransactions);
   }
 
