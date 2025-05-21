@@ -34,37 +34,46 @@ export default function DashboardView() {
   const [localAccount, setLocalAccount] = useState(account);
   const [localTransactions, setLocalTransactions] = useState(transactions);
 
-  async function getInitialData() {
-    await fetchAccount();
-    await fetchTransactions();
+  function getInitialData() {
+    fetchAccount();
+    fetchTransactions();
   }
 
-  async function fetchAccount() {
-    const updatedTransactions = await getAccountInfo();
-    setLocalAccount(updatedTransactions);
-  }
+function fetchAccount() {
+  const updatedAccount$ = getAccountInfo();
+  
+  updatedAccount$.subscribe((account) => {
+      setLocalAccount(account);
+    });
+}
 
-  async function fetchTransactions() {
-    const updatedTransactions = await getTransactions();
-    setLocalTransactions(updatedTransactions);
-  }
+  function fetchTransactions() {
+  const updatedTransactions$ = getTransactions();
 
-  async function submitAddTransaction(transaction: TransactionInput) {
-    await addTransaction(transaction);
+  updatedTransactions$.subscribe((transactions) => {
+    setLocalTransactions(transactions);
+  });
+}
 
-    const updatedTransactions = await getTransactions();
-    setLocalTransactions(updatedTransactions);
-  }
+function submitAddTransaction(transaction: TransactionInput) {
+  addTransaction(transaction);
 
-  async function submitEditTransaction(transaction: TransactionData) {
-    await editTransaction(transaction);
+  const updatedTransactions$ = getTransactions();
+
+  updatedTransactions$.subscribe((transactions) => {
+    setLocalTransactions(transactions);
+  });
+}
+
+  function submitEditTransaction(transaction: TransactionData) {
+    editTransaction(transaction);
     setLocalTransactions(
       localTransactions.map((t) => (t.id === transaction.id ? transaction : t))
     );
   }
 
-  async function submitDeleteTransaction(transactionId: string) {
-    await deleteTransaction(transactionId);
+  function submitDeleteTransaction(transactionId: string) {
+    deleteTransaction(transactionId);
     setLocalTransactions(
       localTransactions.filter((t) => t.id !== transactionId)
     );
