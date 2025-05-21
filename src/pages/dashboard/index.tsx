@@ -1,18 +1,12 @@
 "use client";
 import { FHeader, FMenuDropdown } from "@/components";
-import { getAccountInfo } from "@/services/Account/Account.controller";
-import { Account } from "@/services/Account/Account.model";
+import { AccountData } from "@/domain/types/AccountTypes";
 import {
-  addTransaction,
-  deleteTransaction,
-  editTransaction,
-  getTransactions,
-} from "@/services/Transaction/Transaction.controller";
-import {
-  Transaction,
   TransactionData,
-  TransactionInput,
-} from "@/services/Transaction/Transaction.model";
+  TransactionForm,
+} from "@/domain/types/TransactionTypes";
+import { AccountController } from "@/presentation/controllers/AccountController";
+import { TransactionController } from "@/presentation/controllers/TransactionController";
 import { useBalanceStore } from "@/stores/useBalanceStore";
 import ThemeProviderWrapper from "@/theme/ThemeProviderWrapper";
 import { AccountCircle } from "@mui/icons-material";
@@ -25,17 +19,19 @@ import AccountDashboard from "./components/AccountDashboard/AccountDashboard";
 export default function DashboardView() {
   const setBalance = useBalanceStore((state) => state.setBalance);
   const balance = useBalanceStore((state) => state.balance);
-  const account: Account = {
+
+  const [localAccount, setLocalAccount] = useState<AccountData>({
     fullName: "",
     firstName: "",
     balance: 0,
     currency: "",
-  };
+  });
+  const [localTransactions, setLocalTransactions] = useState<TransactionData[]>(
+    []
+  );
 
-  const transactions: Transaction[] = [];
-
-  const [localAccount, setLocalAccount] = useState(account);
-  const [localTransactions, setLocalTransactions] = useState(transactions);
+  const accountController = new AccountController();
+  const transactionController = new TransactionController();
 
   async function getInitialData() {
     await fetchAccount();
@@ -43,13 +39,13 @@ export default function DashboardView() {
   }
 
   async function fetchAccount() {
-    const updatedAccount = await getAccountInfo();
+    const updatedAccount = await accountController.getAccountInfo();
     setLocalAccount(updatedAccount);
     setBalance(updatedAccount.balance);
   }
 
   async function fetchTransactions() {
-    const updatedTransactions = await getTransactions();
+    const updatedTransactions = await transactionController.getTransactions();
     setLocalTransactions(updatedTransactions);
   }
 
@@ -58,10 +54,11 @@ export default function DashboardView() {
     await fetchAccount();
   }
 
-  async function submitAddTransaction(transaction: TransactionInput) {
-    await addTransaction(transaction);
+  async function submitAddTransaction(transactionForm: TransactionForm) {
+    const transaction =
+      await transactionController.addTransaction(transactionForm);
 
-    const updatedTransactions = await getTransactions();
+    const updatedTransactions = [...localTransactions, transaction];
     setLocalTransactions(updatedTransactions);
 
     setLocalAccount((prev) => {
@@ -73,17 +70,22 @@ export default function DashboardView() {
     await fetchTransactions();
   }
 
-  async function submitEditTransaction(transaction: TransactionData) {
-    await editTransaction(transaction);
+  async function submitEditTransaction(transactionData: TransactionData) {
+    const editedTransaction =
+      await transactionController.editTransaction(transactionData);
     setLocalTransactions(
-      localTransactions.map((t) => (t.id === transaction.id ? transaction : t))
+      localTransactions.map((transaction) =>
+        transaction.id === transaction.id ? editedTransaction : transaction
+      )
     );
   }
 
   async function submitDeleteTransaction(transactionId: string) {
-    await deleteTransaction(transactionId);
+    await transactionController.removeTransaction(transactionId);
     setLocalTransactions(
-      localTransactions.filter((t) => t.id !== transactionId)
+      localTransactions.filter(
+        (transaction) => transaction.id !== transactionId
+      )
     );
     await updateAll();
   }

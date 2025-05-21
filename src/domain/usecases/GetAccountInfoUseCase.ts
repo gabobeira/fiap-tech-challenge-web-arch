@@ -5,6 +5,8 @@ export class GetAccountInfoUseCase {
   constructor(private readonly accountRepository: AccountRepository) {}
 
   async execute(): Promise<Account> {
-    return await this.accountRepository.getAccountInfo();
+    const data = await this.accountRepository.getAccountInfo();
+
+    return new Account(data);
   }
 }

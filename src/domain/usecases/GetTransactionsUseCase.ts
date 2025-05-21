@@ -5,6 +5,8 @@ export class GetTransactionsUseCase {
   constructor(private readonly transactionRespository: TransactionRepository) {}
 
   async execute(): Promise<Transaction[]> {
-    return await this.transactionRespository.getTransactions();
+    const data = await this.transactionRespository.getTransactions();
+
+    return data.map((transaction) => new Transaction(transaction));
   }
 }

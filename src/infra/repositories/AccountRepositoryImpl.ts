@@ -1,11 +1,10 @@
-import { Account } from "@/domain/entities/Account";
 import { AccountRepository } from "@/domain/repositories/AccountRepository";
-import { AccountData } from "@/types/Account.types";
+import { AccountData } from "@/domain/types/AccountTypes";
 
 export class AccountRepositoryImpl implements AccountRepository {
-  private readonly baseUrl: string = "http://localhost:5000/";
+  private readonly baseUrl: string = "http://localhost:5000";
 
-  async getAccountInfo(): Promise<Account> {
+  async getAccountInfo(): Promise<AccountData> {
     const res = await fetch(`${this.baseUrl}/account`, {
       method: "GET",
       headers: {
@@ -13,8 +12,6 @@ export class AccountRepositoryImpl implements AccountRepository {
       },
     });
 
-    const data: AccountData = await res.json();
-
-    return new Account(data);
+    return await res.json();
   }
 }

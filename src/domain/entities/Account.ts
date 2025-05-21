@@ -1,4 +1,4 @@
-import { AccountData } from "@/types/Account.types";
+import { AccountData } from "../types/AccountTypes";
 
 export class Account {
   private readonly fullName: string;

@@ -1,9 +1,10 @@
-import { Transaction } from "@/domain/entities/Transaction";
-import { TransactionData, TransactionParams } from "@/types/Transaction.types";
+import { TransactionData, TransactionParams } from "../types/TransactionTypes";
 
 export interface TransactionRepository {
-  getTransactions(): Promise<Transaction[]>;
-  createTransaction(transactionParams: TransactionParams): Promise<Transaction>;
-  updateTransaction(transaction: TransactionData): Promise<Transaction>;
+  getTransactions(): Promise<TransactionData[]>;
+  createTransaction(
+    transactionParams: TransactionParams
+  ): Promise<TransactionData>;
+  updateTransaction(transactionData: TransactionData): Promise<TransactionData>;
   deleteTransaction(transactionId: string): Promise<void>;
 }

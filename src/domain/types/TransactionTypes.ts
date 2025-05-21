@@ -9,3 +9,5 @@ export type TransactionData = {
 };
 
 export type TransactionParams = Omit<TransactionData, "id">;
+
+export type TransactionForm = Omit<TransactionData, "id" | "date" | "currency">;

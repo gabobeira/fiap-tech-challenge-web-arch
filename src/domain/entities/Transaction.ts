@@ -1,4 +1,4 @@
-import { TransactionData } from "@/types/Transaction.types";
+import { TransactionData } from "../types/TransactionTypes";
 
 export class Transaction {
   private readonly id: string;
@@ -6,8 +6,8 @@ export class Transaction {
   private readonly value: number;
   private readonly currency: string;
   private readonly type: string;
-  private readonly fileBase64: string | null;
-  private readonly fileName: string | null;
+  private readonly fileBase64: string;
+  private readonly fileName: string;
 
   constructor(data: TransactionData) {
     this.id = data.id;
@@ -15,8 +15,8 @@ export class Transaction {
     this.value = data.value;
     this.currency = data.currency;
     this.type = data.type;
-    this.fileBase64 = data.fileBase64 ?? null;
-    this.fileName = data.fileName ?? null;
+    this.fileBase64 = data.fileBase64 ?? "";
+    this.fileName = data.fileName ?? "";
   }
 
   getId(): string {
@@ -39,11 +39,11 @@ export class Transaction {
     return this.type;
   }
 
-  getFileBase64(): string | null {
+  getFileBase64(): string {
     return this.fileBase64;
   }
 
-  getFileName(): string | null {
+  getFileName(): string {
     return this.fileName;
   }
 }

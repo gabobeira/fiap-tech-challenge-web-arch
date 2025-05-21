@@ -1,11 +1,13 @@
-import { Transaction } from "@/domain/entities/Transaction";
 import { TransactionRepository } from "@/domain/repositories/TransactionRepository";
-import { TransactionData, TransactionParams } from "@/types/Transaction.types";
+import {
+  TransactionData,
+  TransactionParams,
+} from "@/domain/types/TransactionTypes";
 
 export class TransactionRepositoryImpl implements TransactionRepository {
-  private readonly baseUrl: string = "http://localhost:5000/";
+  private readonly baseUrl: string = "http://localhost:5000";
 
-  async getTransactions(): Promise<Transaction[]> {
+  async getTransactions(): Promise<TransactionData[]> {
     const res = await fetch(`${this.baseUrl}/transactions`, {
       method: "GET",
       headers: {
@@ -14,14 +16,12 @@ export class TransactionRepositoryImpl implements TransactionRepository {
       cache: "no-store",
     });
 
-    const response: TransactionData[] = await res.json();
-
-    return response.map((transaction) => new Transaction(transaction));
+    return await res.json();
   }
 
   async createTransaction(
     transactionParams: TransactionParams
-  ): Promise<Transaction> {
+  ): Promise<TransactionData> {
     const res = await fetch(`${this.baseUrl}/transactions`, {
       method: "POST",
       headers: {
@@ -30,23 +30,24 @@ export class TransactionRepositoryImpl implements TransactionRepository {
       body: JSON.stringify(transactionParams),
     });
 
-    const data: TransactionData = await res.json();
-
-    return new Transaction(data);
+    return await res.json();
   }
 
-  async updateTransaction(transaction: TransactionData): Promise<Transaction> {
-    const res = await fetch(`${this.baseUrl}/transactions/${transaction.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(transaction),
-    });
+  async updateTransaction(
+    transactionData: TransactionData
+  ): Promise<TransactionData> {
+    const res = await fetch(
+      `${this.baseUrl}/transactions/${transactionData.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(transactionData),
+      }
+    );
 
-    const data: TransactionData = await res.json();
-
-    return new Transaction(data);
+    return await res.json();
   }
 
   async deleteTransaction(transactionId: string): Promise<void> {

@@ -1,5 +1,5 @@
-import { Account } from "@/domain/entities/Account";
+import { AccountData } from "../types/AccountTypes";
 
 export interface AccountRepository {
-  getAccountInfo(): Promise<Account>;
+  getAccountInfo(): Promise<AccountData>;
 }
