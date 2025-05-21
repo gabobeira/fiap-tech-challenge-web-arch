@@ -4,19 +4,15 @@ import { FChip } from "@/components/atoms/FChip/FChip";
 import { FInput } from "@/components/atoms/FInput/FInput";
 import { FInputFile } from "@/components/atoms/FInputFile/FInputFile";
 import { FSelectInput } from "@/components/atoms/FSelectInput/FSelectInput";
+import {
+  TransactionData,
+  TransactionForm,
+} from "@/domain/types/TransactionTypes";
 import { AlertColor, Box, SelectChangeEvent, Stack } from "@mui/material";
 import { useState } from "react";
 
-export interface FTransactionFormItemInput {
-  type: string;
-  value: number;
-  fileBase64?: string;
-  fileName?: string;
-}
-
-export interface FTransactionFormItem extends FTransactionFormItemInput {
-  id: string;
-}
+export type FTransactionFormItemInput = TransactionForm;
+export type FTransactionFormItem = TransactionData;
 
 export interface FTransactionFormProps {
   accountBalance: number;
@@ -189,7 +185,9 @@ export function FTransactionForm({
         setFileBase64(base64String);
       };
       reader.readAsDataURL(file);
-    } catch (error) {}
+    } catch {
+      throw new Error("Erro ao fazer upload do arquivo");
+    }
   };
 
   return (

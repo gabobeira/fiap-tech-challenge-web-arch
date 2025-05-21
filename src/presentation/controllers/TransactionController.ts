@@ -40,7 +40,7 @@ export class TransactionController {
     );
   }
 
-  private static getTransactionData(transaction: Transaction) {
+  private getTransactionData(transaction: Transaction) {
     const transactionData = {
       id: transaction.getId(),
       date: transaction.getDate(),
@@ -64,7 +64,7 @@ export class TransactionController {
     const transactions = await this.getTransactionsUseCase.execute();
 
     return transactions.map((transaction) =>
-      TransactionController.getTransactionData(transaction)
+      this.getTransactionData(transaction)
     );
   }
 
@@ -72,14 +72,14 @@ export class TransactionController {
     const transaction =
       await this.createTransactionUseCase.execute(transactionForm);
 
-    return TransactionController.getTransactionData(transaction);
+    return this.getTransactionData(transaction);
   }
 
   async editTransaction(transactionData: TransactionData) {
     const transaction =
       await this.updateTransactionUseCase.execute(transactionData);
 
-    return TransactionController.getTransactionData(transaction);
+    return this.getTransactionData(transaction);
   }
 
   async removeTransaction(transactionId: string) {

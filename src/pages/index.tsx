@@ -54,88 +54,6 @@ export default function LandingView({ menuItems }: LandingViewProps) {
         <title>Landing Page</title>
         <meta name="description" content="By FIAP Tech Challenge" />
       </Head>
-      <FHeader
-        maxWidth="lg"
-        leftContent={
-          <Box display="flex" alignItems="center" gap={8}>
-            <Box
-              sx={{
-                display: { xs: "none", md: "none", lg: "flex" },
-                userSelect: "none",
-              }}
-            >
-              <Image
-                src={`${image}/logo.svg`}
-                alt="logo Bytebank"
-                width={146}
-                height={32}
-                loading="lazy"
-              />
-            </Box>
-            <Box
-              sx={{
-                display: { xs: "none", md: "flex", lg: "none" },
-                userSelect: "none",
-              }}
-            >
-              <Image
-                src={`${image}/logo-small.svg`}
-                alt="logo Bytebank pequeno"
-                width={27}
-                height={27}
-                loading="lazy"
-              />
-            </Box>
-            <FMenuDropdown
-              menuItems={menuItems}
-              options={{ sx: { display: { xs: "flex", md: "none" } } }}
-            >
-              <Link href="" />
-            </FMenuDropdown>
-            <FMenuList
-              menuItems={menuItems}
-              variant="row"
-              options={{
-                sx: { display: { xs: "none", md: "flex" }, fontWeight: 600 },
-              }}
-            >
-              <Link href="" />
-            </FMenuList>
-          </Box>
-        }
-        rightContent={
-          <Box>
-            <FAccountButtons
-              color="primary"
-              options={{
-                sx: {
-                  display: { xs: "none", md: "flex" },
-                },
-              }}
-              handleNewAccount={() => {
-                actionsHome.handleNewAccount();
-              }}
-              handleLogin={() => {
-                actionsHome.handleLogin();
-              }}
-            />
-            <Box
-              sx={{
-                display: { xs: "flex", md: "none" },
-                userSelect: "none",
-              }}
-            >
-              <Image
-                src={`${image}/logo.svg`}
-                alt="logo Bytebank"
-                width={146}
-                height={32}
-                loading="lazy"
-              />
-            </Box>
-          </Box>
-        }
-      />
       <main
         style={{
           display: "flex",
@@ -145,6 +63,88 @@ export default function LandingView({ menuItems }: LandingViewProps) {
           background: "linear-gradient(var(--mui-palette-tertiary-main), #fff)",
         }}
       >
+        <FHeader
+          maxWidth="lg"
+          leftContent={
+            <Box display="flex" alignItems="center" gap={8}>
+              <Box
+                sx={{
+                  display: { xs: "none", md: "none", lg: "flex" },
+                  userSelect: "none",
+                }}
+              >
+                <Image
+                  src={`${image}/logo.svg`}
+                  alt="logo Bytebank"
+                  width={146}
+                  height={32}
+                  loading="lazy"
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: { xs: "none", md: "flex", lg: "none" },
+                  userSelect: "none",
+                }}
+              >
+                <Image
+                  src={`${image}/logo-small.svg`}
+                  alt="logo Bytebank pequeno"
+                  width={27}
+                  height={27}
+                  loading="lazy"
+                />
+              </Box>
+              <FMenuDropdown
+                menuItems={menuItems}
+                options={{ sx: { display: { xs: "flex", md: "none" } } }}
+              >
+                <Link href="" />
+              </FMenuDropdown>
+              <FMenuList
+                menuItems={menuItems}
+                variant="row"
+                options={{
+                  sx: { display: { xs: "none", md: "flex" }, fontWeight: 600 },
+                }}
+              >
+                <Link href="" />
+              </FMenuList>
+            </Box>
+          }
+          rightContent={
+            <Box>
+              <FAccountButtons
+                color="primary"
+                options={{
+                  sx: {
+                    display: { xs: "none", md: "flex" },
+                  },
+                }}
+                handleNewAccount={() => {
+                  actionsHome.handleNewAccount();
+                }}
+                handleLogin={() => {
+                  actionsHome.handleLogin();
+                }}
+              />
+              <Box
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  userSelect: "none",
+                }}
+              >
+                <Image
+                  src={`${image}/logo.svg`}
+                  alt="logo Bytebank"
+                  width={146}
+                  height={32}
+                  loading="lazy"
+                />
+              </Box>
+            </Box>
+          }
+        />
         <Container maxWidth="lg" sx={{ flex: 1 }}>
           <Box paddingTop={3} paddingBottom={3} gap={8}>
             <Grid
