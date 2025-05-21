@@ -152,9 +152,24 @@ export default function AccountDashboard({
                 balance={formattedBalance}
                 date={formattedDate}
               >
-                <Image src={`${image}/card-pixels-2.svg`} alt="" fill />
-                <Image src={`${image}/card-pixels-1.svg`} alt="" fill />
-                <Image src={`${image}/card-illustration-1.svg`} alt="" fill />
+                <Image
+                  src={`${image}/card-pixels-2.svg`}
+                  alt=""
+                  fill
+                  loading="lazy"
+                />
+                <Image
+                  src={`${image}/card-pixels-1.svg`}
+                  alt=""
+                  fill
+                  loading="lazy"
+                />
+                <Image
+                  src={`${image}/card-illustration-1.svg`}
+                  alt=""
+                  fill
+                  loading="lazy"
+                />
               </FAccountSummaryCard>
             </Grid>
           ) : null}
@@ -171,11 +186,13 @@ export default function AccountDashboard({
                   src={`${image}/card-pixels-3.svg`}
                   alt=""
                   layout="fill"
+                  loading="lazy"
                 />
                 <Image
                   src={`${image}/card-pixels-4.svg`}
                   alt=""
                   layout="fill"
+                  loading="lazy"
                 />
               </FInvestmentsCard>
             </Grid>
@@ -197,16 +214,19 @@ export default function AccountDashboard({
                     src={`${image}/card-pixels-3.svg`}
                     alt=""
                     layout="fill"
+                    loading="lazy"
                   />
                   <Image
                     src={`${image}/card-pixels-4.svg`}
                     alt=""
                     layout="fill"
+                    loading="lazy"
                   />
                   <Image
                     src={`${image}/card-illustration-2.svg`}
                     alt=""
                     layout="fill"
+                    loading="lazy"
                   />
                 </FTransactionFormCard>
               </Grid>
