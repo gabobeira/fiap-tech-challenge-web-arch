@@ -13,6 +13,7 @@ import {
   TransactionData,
   TransactionInput,
 } from "@/services/Transaction/Transaction.model";
+import { useBalanceStore } from "@/stores/useBalanceStore";
 import ThemeProviderWrapper from "@/theme/ThemeProviderWrapper";
 import { AccountCircle } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
@@ -22,6 +23,8 @@ import { useState } from "react";
 import AccountDashboard from "./components/AccountDashboard/AccountDashboard";
 
 export default function DashboardView() {
+  const setBalance = useBalanceStore((state) => state.setBalance);
+  const balance = useBalanceStore((state) => state.balance);
   const account: Account = {
     fullName: "",
     firstName: "",
@@ -40,13 +43,20 @@ export default function DashboardView() {
   }
 
   async function fetchAccount() {
-    const updatedTransactions = await getAccountInfo();
-    setLocalAccount(updatedTransactions);
+    const updatedAccount = await getAccountInfo();
+    setLocalAccount(updatedAccount);
+    setBalance(updatedAccount.balance);
   }
 
   async function fetchTransactions() {
     const updatedTransactions = await getTransactions();
     setLocalTransactions(updatedTransactions);
+    console.log(updatedTransactions);
+  }
+
+  async function updateAll() {
+    await fetchTransactions();
+    await fetchAccount();
   }
 
   async function submitAddTransaction(transaction: TransactionInput) {
@@ -54,6 +64,14 @@ export default function DashboardView() {
 
     const updatedTransactions = await getTransactions();
     setLocalTransactions(updatedTransactions);
+
+    setLocalAccount((prev) => {
+      const newBalance = prev.balance + transaction.value;
+      setBalance(newBalance);
+      return { ...prev, balance: newBalance };
+    });
+
+    await fetchTransactions();
   }
 
   async function submitEditTransaction(transaction: TransactionData) {
@@ -68,6 +86,7 @@ export default function DashboardView() {
     setLocalTransactions(
       localTransactions.filter((t) => t.id !== transactionId)
     );
+    await updateAll();
   }
 
   return (
@@ -96,7 +115,7 @@ export default function DashboardView() {
         }
       />
       <AccountDashboard
-        account={localAccount}
+        account={{ ...localAccount, balance }}
         getInitialData={getInitialData}
         transactionList={localTransactions}
         submitAddTransaction={submitAddTransaction}
