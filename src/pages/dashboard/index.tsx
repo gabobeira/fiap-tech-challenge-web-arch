@@ -51,7 +51,6 @@ export default function DashboardView() {
   async function fetchTransactions() {
     const updatedTransactions = await getTransactions();
     setLocalTransactions(updatedTransactions);
-    console.log(updatedTransactions);
   }
 
   async function updateAll() {
