@@ -21,7 +21,7 @@ export function FTransactionFormCard({
       variant="light"
       options={{
         sx: {
-          height: "600px",
+          height: "700px",
           position: "relative",
         },
       }}
@@ -54,13 +54,11 @@ export function FTransactionFormCard({
         {children && children[2]}
       </Box>
 
-      <Box width={{ xs: "100%", sm: "70%" }}>
-        <FTransactionForm
-          accountBalance={accountBalance}
-          addTransaction={addTransaction}
-          buttonText="Concluir transação"
-        />
-      </Box>
+      <FTransactionForm
+        accountBalance={accountBalance}
+        addTransaction={addTransaction}
+        buttonText="Concluir transação"
+      />
     </FCard>
   );
 }
