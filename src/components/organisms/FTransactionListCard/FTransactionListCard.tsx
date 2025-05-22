@@ -6,7 +6,7 @@ import {
   FTransactionListProps,
 } from "@/components/molecules/FTransactionList/FTransactionList";
 import { FilterList } from "@mui/icons-material";
-import { Container, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 export function FTransactionListCard({
@@ -69,7 +69,7 @@ export function FTransactionListCard({
       >
         <FFilter onFilterChange={handleFilterChange} showSelect={showSelect} />
       </Stack>
-      <Container
+      <Box
         sx={{
           height: "100%",
           overflowY: "visible",
@@ -81,7 +81,7 @@ export function FTransactionListCard({
           editTransaction={editTransaction}
           deleteTransaction={deleteTransaction}
         />
-      </Container>
+      </Box>
     </FCard>
   );
 }

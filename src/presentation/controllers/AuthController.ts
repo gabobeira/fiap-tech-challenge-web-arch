@@ -64,7 +64,7 @@ export class AuthController {
 
   getToken(): UserToken | null {
     if (typeof window === "undefined") return null;
-    const cookies = document.cookie.split(";");
+    const cookies = document.cookie.split(/[\s;]/);
 
     const dataUserCookie = cookies.find((cookie) =>
       cookie.startsWith("auth_token=")

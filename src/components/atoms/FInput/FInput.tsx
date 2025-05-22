@@ -38,9 +38,9 @@ export function FInput({
             sx: {
               textAlign: textposition,
               borderRadius: "8px",
-              borderWidth: 2,
               color: "var(--mui-palette-primary-constrastText)",
               borderColor: "var(--mui-palette-primary-main)",
+              backgroundColor: "#FFFFFF",
               boxShadow: "none",
               "::placeholder": {
                 color: "var(--mui-palette-primary-main)",
@@ -51,7 +51,7 @@ export function FInput({
               "&:hover .MuiOutlinedInput-notchedOutline, &.Mui-focused .MuiOutlinedInput-notchedOutline, &.Mui-focused:hover .MuiOutlinedInput-notchedOutline":
                 {
                   borderColor: "var(--mui-palette-primary-main)",
-                  borderWidth: 2.5,
+                  borderWidth: 2,
                 },
               "& .MuiOutlinedInput-input:-webkit-autofill": {
                 WebkitBoxShadow:

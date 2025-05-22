@@ -7,6 +7,7 @@ interface FCardProps {
   children: React.ReactNode;
   variant?: FCardVariant;
   options?: CardProps;
+  customPadding?: string;
 }
 
 const bgColor = {
@@ -19,7 +20,13 @@ const textColor = {
   dark: "var(--mui-palette-bgCard-contrastText)",
 };
 
-export function FCard({ title, children, variant, options }: FCardProps) {
+export function FCard({
+  title,
+  children,
+  variant,
+  options,
+  customPadding,
+}: FCardProps) {
   return (
     <Card
       {...options}
@@ -29,7 +36,7 @@ export function FCard({ title, children, variant, options }: FCardProps) {
         backgroundColor: variant
           ? bgColor[variant]
           : "var(--mui-palette-bgCard-main)",
-        padding: "32px",
+        padding: customPadding ?? "32px",
         borderRadius: "8px",
       }}
     >

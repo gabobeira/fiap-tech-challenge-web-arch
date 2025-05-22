@@ -40,27 +40,7 @@ export default function Dashboard() {
   const router = useRouter();
   const token = authController.getToken();
 
-  function validateSession() {
-    console.log(
-      "Validando sessão",
-      authController.isAuthenticated(),
-      authController.verifyExpirationToken(),
-      token
-    );
-
-    if (
-      !authController.isAuthenticated() ||
-      authController.verifyExpirationToken()
-    ) {
-      setSessionExpired(true);
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
-    }
-  }
-
-  async function fetchData() {
-    validateSession();
+  async function getInitialData() {
     if (token) {
       const account = await accountController.getAccountInfo(token!.id);
       const transactions = await transactionController.getTransactions(
@@ -76,17 +56,17 @@ export default function Dashboard() {
 
   async function submitAddTransaction(transaction: TransactionForm) {
     await transactionController.addTransaction(transaction, account.idUser);
-    await fetchData();
+    await getInitialData();
   }
 
   async function submitEditTransaction(transaction: TransactionData) {
     await transactionController.editTransaction(transaction);
-    await fetchData();
+    await getInitialData();
   }
 
   async function submitDeleteTransaction(transactionId: string) {
     await transactionController.removeTransaction(transactionId);
-    await fetchData();
+    await getInitialData();
   }
 
   function handleLogout() {
@@ -95,7 +75,23 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    fetchData();
+    getInitialData();
+    const interval = setInterval(() => {
+      if (
+        !authController.isAuthenticated() ||
+        authController.verifyExpirationToken()
+      ) {
+        setSessionExpired(true);
+        const timeout = setTimeout(() => {
+          router.push("/");
+        }, 2000);
+
+        return () => clearTimeout(timeout);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -151,13 +147,14 @@ export default function Dashboard() {
                     display: { xs: "none", lg: "block" },
                   },
                 }}
+                customPadding="12px"
               >
                 <FMenuList<DashboardView>
                   menuItems={MENU_ITEMS_DASHBOARD.map((item) => ({
                     ...item,
-                    current: item.key === dashboardView,
+                    current: item.view === dashboardView,
                   }))}
-                  itemClick={(path) => setDashboardView(path)}
+                  itemClick={(view) => setDashboardView(view)}
                 />
               </FCard>
             </Grid>

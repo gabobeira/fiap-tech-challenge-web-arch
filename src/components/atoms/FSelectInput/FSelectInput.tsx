@@ -48,12 +48,11 @@ export function FSelectInput({
           color: "var(--mui-palette-primary-main)",
           ".MuiOutlinedInput-notchedOutline": {
             borderColor: "var(--mui-palette-primary-main)",
-            borderWidth: 2,
           },
-          "&:hover .MuiOutlinedInput-notchedOutline, &.Mui-focused .MuiOutlinedInput-notchedOutline":
+          "&:hover .MuiOutlinedInput-notchedOutline, &.Mui-focused .MuiOutlinedInput-notchedOutline, &.Mui-focused:hover .MuiOutlinedInput-notchedOutline":
             {
               borderColor: "var(--mui-palette-primary-main)",
-              borderWidth: 3,
+              borderWidth: 2,
             },
           ".MuiSvgIcon-root": {
             color: "var(--mui-palette-primary-main)",
