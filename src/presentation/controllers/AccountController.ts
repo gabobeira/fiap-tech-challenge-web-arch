@@ -22,6 +22,7 @@ export class AccountController {
       firstName: account.getFirstName(),
       balance: account.getBalance(),
       currency: account.getCurrency(),
+      investments: account.getInvestments(),
     };
   }
 }
