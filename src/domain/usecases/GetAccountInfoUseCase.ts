@@ -1,12 +1,14 @@
+import { firstValueFrom, map, Observable } from "rxjs";
 import { Account } from "../entities/Account";
 import { AccountRepository } from "../repositories/AccountRepository";
+import { AccountData } from "../types/AccountTypes";
 
 export class GetAccountInfoUseCase {
   constructor(private readonly accountRepository: AccountRepository) {}
 
-  async execute(): Promise<Account> {
-    const data = await this.accountRepository.getAccountInfo();
-
-    return new Account(data);
+  execute(): Observable<Account> {
+    return this.accountRepository.getAccountInfo().pipe(
+      map((data: AccountData) => new Account(data))
+    );
   }
 }

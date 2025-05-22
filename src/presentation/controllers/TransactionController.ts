@@ -11,6 +11,7 @@ import { GetTransactionsUseCase } from "@/domain/usecases/GetTransactionsUseCase
 import { UpdateTransactionUseCase } from "@/domain/usecases/UpdateTransactionUseCase";
 import { AccountRepositoryImpl } from "@/infra/repositories/AccountRepositoryImpl";
 import { TransactionRepositoryImpl } from "@/infra/repositories/TransactionRepositoryImpl";
+import { from, map } from "rxjs";
 
 export class TransactionController {
   private readonly accountRepository: AccountRepository;
@@ -60,12 +61,14 @@ export class TransactionController {
     return transactionData;
   }
 
-  async getTransactions() {
-    const transactions = await this.getTransactionsUseCase.execute();
-
-    return transactions.map((transaction) =>
-      TransactionController.getTransactionData(transaction)
-    );
+  getTransactions() {
+    return from(this.getTransactionsUseCase.execute()).pipe(
+    map((transactions) =>
+      transactions.map((transaction) =>
+        TransactionController.getTransactionData(transaction)
+      )
+    )
+  );
   }
 
   async addTransaction(transactionForm: TransactionForm) {

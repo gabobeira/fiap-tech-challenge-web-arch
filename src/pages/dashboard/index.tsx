@@ -33,25 +33,26 @@ export default function DashboardView() {
   const accountController = new AccountController();
   const transactionController = new TransactionController();
 
-  async function getInitialData() {
-    await fetchAccount();
-    await fetchTransactions();
+  function getInitialData() {
+    fetchAccount();
+    fetchTransactions();
   }
 
-  async function fetchAccount() {
-    const updatedAccount = await accountController.getAccountInfo();
-    setLocalAccount(updatedAccount);
-    setBalance(updatedAccount.balance);
+  function fetchAccount() {
+    accountController.getAccountInfo().subscribe((updatedAccount) => {
+      setLocalAccount(updatedAccount);
+      setBalance(updatedAccount.balance)
+    });
   }
 
-  async function fetchTransactions() {
-    const updatedTransactions = await transactionController.getTransactions();
-    setLocalTransactions(updatedTransactions);
+  function fetchTransactions() {
+    transactionController.getTransactions().subscribe((updatedTransactions) =>
+    setLocalTransactions(updatedTransactions))
   }
 
-  async function updateAll() {
-    await fetchTransactions();
-    await fetchAccount();
+  function updateAll() {
+    fetchTransactions();
+    fetchAccount();
   }
 
   async function submitAddTransaction(transactionForm: TransactionForm) {

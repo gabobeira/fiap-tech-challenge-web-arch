@@ -1,10 +1,11 @@
+import { Observable } from "rxjs";
 import { TransactionData, TransactionParams } from "../types/TransactionTypes";
 
 export interface TransactionRepository {
-  getTransactions(): Promise<TransactionData[]>;
+  getTransactions(): Observable<TransactionData[]>;
   createTransaction(
     transactionParams: TransactionParams
-  ): Promise<TransactionData>;
-  updateTransaction(transactionData: TransactionData): Promise<TransactionData>;
-  deleteTransaction(transactionId: string): Promise<void>;
+  ): Observable<TransactionData>;
+  updateTransaction(transactionData: TransactionData): Observable<TransactionData>;
+  deleteTransaction(transactionId: string): Observable<void>;
 }

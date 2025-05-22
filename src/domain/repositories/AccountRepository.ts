@@ -1,5 +1,6 @@
+import { Observable } from "rxjs";
 import { AccountData } from "../types/AccountTypes";
 
 export interface AccountRepository {
-  getAccountInfo(): Promise<AccountData>;
+  getAccountInfo(): Observable<AccountData>;
 }
