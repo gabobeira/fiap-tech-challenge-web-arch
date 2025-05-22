@@ -9,13 +9,17 @@ export class CreateTransactionUseCase {
     private readonly accountRepository: AccountRepository
   ) {}
 
-  async execute(transactionForm: TransactionForm): Promise<Transaction> {
-    const account = await this.accountRepository.getAccountInfo();
+  async execute(
+    transactionForm: TransactionForm,
+    idUser: number
+  ): Promise<Transaction> {
+    const account = await this.accountRepository.getAccountInfo(idUser);
 
     const transactionParams: TransactionParams = {
       ...transactionForm,
       date: new Date().toISOString(),
       currency: account.currency,
+      idAccount: account.id,
     };
 
     const data =

@@ -1,7 +1,7 @@
 import { TransactionData, TransactionParams } from "../types/TransactionTypes";
 
 export interface TransactionRepository {
-  getTransactions(): Promise<TransactionData[]>;
+  getTransactions(idAccount: number): Promise<TransactionData[]>;
   createTransaction(
     transactionParams: TransactionParams
   ): Promise<TransactionData>;

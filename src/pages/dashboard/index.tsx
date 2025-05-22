@@ -1,5 +1,7 @@
 "use client";
-import { FCard, FHeader, FMenuDropdown, FMenuList } from "@/components";
+import { FAlert, FHeader, FMenuDropdown } from "@/components";
+
+import { FCard, FMenuList } from "@/components";
 import { DashboardView, MENU_ITEMS_DASHBOARD } from "@/constants/menuItems";
 import { AccountData } from "@/domain/types/AccountTypes";
 import {
@@ -7,28 +9,28 @@ import {
   TransactionForm,
 } from "@/domain/types/TransactionTypes";
 import { AccountController } from "@/presentation/controllers/AccountController";
+import { AuthController } from "@/presentation/controllers/AuthController";
 import { TransactionController } from "@/presentation/controllers/TransactionController";
-import { useBalanceStore } from "@/stores/useBalanceStore";
 import ThemeProviderWrapper from "@/theme/ThemeProviderWrapper";
 import { AccountCircle } from "@mui/icons-material";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import Head from "next/head";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AccountSummaryContainer from "./containers/AccountSummaryContainer/AccountSummaryContainer";
 import InvestmentsContainer from "./containers/InvestmentsContainer/InvestmentsContainer";
 import TransactionsContainer from "./containers/TransactionsContainer/TransactionsContainer";
 
 export default function Dashboard() {
-  const setBalance = useBalanceStore((state) => state.setBalance);
-  const balance = useBalanceStore((state) => state.balance);
-
   const [localAccount, setLocalAccount] = useState<AccountData>({
     fullName: "",
     firstName: "",
     balance: 0,
     currency: "",
+    id: 0,
+    idUser: 0,
     investments: {
       total: 0,
       fixed: 0,
@@ -40,70 +42,85 @@ export default function Dashboard() {
   );
   const [view, setView] = useState<DashboardView>("summary");
 
+  const [sessionExpired, setSessionExpired] = useState<boolean>(false);
+
   const pathname = usePathname();
   const currentMenuItems = MENU_ITEMS_DASHBOARD.map((item) => ({
     ...item,
     current: item.path === pathname,
   }));
 
+  const authController = new AuthController();
   const accountController = new AccountController();
   const transactionController = new TransactionController();
 
+  const router = useRouter();
+  const token = authController.getToken();
+
+  async function getInitialData() {
+    if (token) {
+      const account = await fetchAccount();
+      await fetchTransactions(account.id);
+      authController.refreshTokenExpiration();
+    }
+  }
+
   async function fetchAccount() {
-    const updatedAccount = await accountController.getAccountInfo();
+    const updatedAccount = await accountController.getAccountInfo(token!.id);
     setLocalAccount(updatedAccount);
-    setBalance(updatedAccount.balance);
+    return updatedAccount;
   }
 
-  async function fetchTransactions() {
-    const updatedTransactions = await transactionController.getTransactions();
+  async function fetchTransactions(idAccount: number) {
+    const updatedTransactions =
+      await transactionController.getTransactions(idAccount);
     setLocalTransactions(updatedTransactions);
+    return updatedTransactions;
   }
 
-  async function updateAll() {
-    await fetchTransactions();
-    await fetchAccount();
-  }
-
-  async function submitAddTransaction(transactionForm: TransactionForm) {
-    const transaction =
-      await transactionController.addTransaction(transactionForm);
-
-    const updatedTransactions = [...localTransactions, transaction];
-    setLocalTransactions(updatedTransactions);
-
-    setLocalAccount((prev) => {
-      const newBalance = prev.balance + transaction.value;
-      setBalance(newBalance);
-      return { ...prev, balance: newBalance };
-    });
-
-    await fetchTransactions();
-  }
-
-  async function submitEditTransaction(transactionData: TransactionData) {
-    const editedTransaction =
-      await transactionController.editTransaction(transactionData);
-    setLocalTransactions(
-      localTransactions.map((transaction) =>
-        transaction.id === transaction.id ? editedTransaction : transaction
-      )
+  async function submitAddTransaction(transaction: TransactionForm) {
+    await transactionController.addTransaction(
+      transaction,
+      localAccount.idUser
     );
+    await getInitialData();
+  }
+
+  async function submitEditTransaction(transaction: TransactionData) {
+    await transactionController.editTransaction(transaction);
+    await getInitialData();
   }
 
   async function submitDeleteTransaction(transactionId: string) {
     await transactionController.removeTransaction(transactionId);
-    setLocalTransactions(
-      localTransactions.filter(
-        (transaction) => transaction.id !== transactionId
-      )
-    );
-    await updateAll();
+    await getInitialData();
+  }
+
+  async function handleLogout() {
+    authController.logout();
+    router.push("/");
   }
 
   useEffect(() => {
-    fetchAccount();
-    fetchTransactions();
+    const interval = setInterval(() => {
+      if (
+        !authController.isAuthenticated() ||
+        authController.verifyExpirationToken()
+      ) {
+        setSessionExpired(true);
+        const timeout = setTimeout(() => {
+          router.push("/");
+        }, 2000);
+
+        return () => clearTimeout(timeout);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [router]);
+
+  useEffect(() => {
+    getInitialData();
   }, []);
 
   return (
@@ -119,6 +136,14 @@ export default function Dashboard() {
           backgroundColor: "var(--mui-palette-tertiary-light)",
         }}
       >
+        {sessionExpired && (
+          <FAlert
+            severity="warning"
+            open={true}
+            text="Sua sessão expirou, faça login novamente!"
+            onClose={() => {}}
+          />
+        )}
         <FHeader
           leftContent={
             <Box>
@@ -132,7 +157,11 @@ export default function Dashboard() {
           rightContent={
             <Box display="flex" alignItems="center" gap={2}>
               <Typography variant="body1">{localAccount.fullName}</Typography>
-              <Link href={"/"} style={{ display: "flex" }}>
+              <Link
+                href={"/"}
+                style={{ display: "flex" }}
+                onClick={handleLogout}
+              >
                 <AccountCircle color="secondary" sx={{ fontSize: 40 }} />
               </Link>
             </Box>
@@ -164,7 +193,7 @@ export default function Dashboard() {
 
             {view === "transactions" ? (
               <TransactionsContainer
-                accountBalance={balance}
+                accountBalance={localAccount.balance}
                 transactionList={localTransactions}
                 submitAddTransaction={submitAddTransaction}
                 submitEditTransaction={submitEditTransaction}

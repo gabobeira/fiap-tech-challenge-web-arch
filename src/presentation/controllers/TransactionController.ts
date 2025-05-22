@@ -47,6 +47,7 @@ export class TransactionController {
       value: transaction.getValue(),
       currency: transaction.getCurrency(),
       type: transaction.getType(),
+      idAccount: transaction.getIdAccount(),
     };
 
     if (transaction.getFileBase64() && transaction.getFileName()) {
@@ -60,17 +61,19 @@ export class TransactionController {
     return transactionData;
   }
 
-  async getTransactions() {
-    const transactions = await this.getTransactionsUseCase.execute();
+  async getTransactions(idAccount: number) {
+    const transactions = await this.getTransactionsUseCase.execute(idAccount);
 
     return transactions.map((transaction) =>
       this.getTransactionData(transaction)
     );
   }
 
-  async addTransaction(transactionForm: TransactionForm) {
-    const transaction =
-      await this.createTransactionUseCase.execute(transactionForm);
+  async addTransaction(transactionForm: TransactionForm, idUser: number) {
+    const transaction = await this.createTransactionUseCase.execute(
+      transactionForm,
+      idUser
+    );
 
     return this.getTransactionData(transaction);
   }

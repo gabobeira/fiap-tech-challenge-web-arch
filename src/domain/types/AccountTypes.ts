@@ -5,6 +5,8 @@ export type Investments = {
 };
 
 export type AccountData = {
+  id: number;
+  idUser: number;
   fullName: string;
   firstName: string;
   balance: number;

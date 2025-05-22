@@ -8,6 +8,7 @@ export class Transaction {
   private readonly type: string;
   private readonly fileBase64: string;
   private readonly fileName: string;
+  private readonly idAccount: number;
 
   constructor(data: TransactionData) {
     this.id = data.id;
@@ -17,6 +18,7 @@ export class Transaction {
     this.type = data.type;
     this.fileBase64 = data.fileBase64 ?? "";
     this.fileName = data.fileName ?? "";
+    this.idAccount = data.idAccount;
   }
 
   getId(): string {
@@ -45,5 +47,8 @@ export class Transaction {
 
   getFileName(): string {
     return this.fileName;
+  }
+  getIdAccount(): number {
+    return this.idAccount;
   }
 }

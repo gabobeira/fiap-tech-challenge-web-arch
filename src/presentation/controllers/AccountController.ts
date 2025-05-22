@@ -14,10 +14,12 @@ export class AccountController {
     );
   }
 
-  async getAccountInfo() {
-    const account: Account = await this.getAccountInfoUseCase.execute();
+  async getAccountInfo(idUser: number) {
+    const account: Account = await this.getAccountInfoUseCase.execute(idUser);
 
     return {
+      id: account.getId(),
+      idUser: account.getIdUser(),
       fullName: account.getFullName(),
       firstName: account.getFirstName(),
       balance: account.getBalance(),

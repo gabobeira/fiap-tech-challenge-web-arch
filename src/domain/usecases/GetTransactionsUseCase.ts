@@ -4,8 +4,8 @@ import { TransactionRepository } from "../repositories/TransactionRepository";
 export class GetTransactionsUseCase {
   constructor(private readonly transactionRespository: TransactionRepository) {}
 
-  async execute(): Promise<Transaction[]> {
-    const data = await this.transactionRespository.getTransactions();
+  async execute(idAccount: number): Promise<Transaction[]> {
+    const data = await this.transactionRespository.getTransactions(idAccount);
 
     return data.map((transaction) => new Transaction(transaction));
   }
