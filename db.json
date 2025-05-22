@@ -26,7 +26,7 @@
       "id": 2,
       "fullName": "gabriel",
       "firstName": "gabriel",
-      "balance": 600001200,
+      "balance": 599941200,
       "currency": "R$",
       "idUser": 2
     }
@@ -112,6 +112,16 @@
       "currency": "R$",
       "type": "Depósito",
       "idAccount": 2
+    },
+    {
+      "type": "Saque",
+      "value": -60000,
+      "fileBase64": "",
+      "fileName": "",
+      "date": "2025-05-22T12:08:12.912Z",
+      "currency": "R$",
+      "idAccount": 2,
+      "id": 10
     }
   ]
 }

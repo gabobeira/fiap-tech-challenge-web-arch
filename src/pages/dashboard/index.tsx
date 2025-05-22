@@ -3,7 +3,6 @@ import { FAlert, FHeader, FMenuDropdown } from "@/components";
 
 import { FCard, FMenuList } from "@/components";
 import { DashboardView, MENU_ITEMS_DASHBOARD } from "@/constants/menuItems";
-import { AccountData } from "@/domain/types/AccountTypes";
 import {
   TransactionData,
   TransactionForm,
@@ -11,44 +10,28 @@ import {
 import { AccountController } from "@/presentation/controllers/AccountController";
 import { AuthController } from "@/presentation/controllers/AuthController";
 import { TransactionController } from "@/presentation/controllers/TransactionController";
+import { useAccountStore } from "@/stores/AccountStore";
 import ThemeProviderWrapper from "@/theme/ThemeProviderWrapper";
 import { AccountCircle } from "@mui/icons-material";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import Head from "next/head";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import AccountSummaryContainer from "./containers/AccountSummaryContainer/AccountSummaryContainer";
 import InvestmentsContainer from "./containers/InvestmentsContainer/InvestmentsContainer";
 import TransactionsContainer from "./containers/TransactionsContainer/TransactionsContainer";
 
 export default function Dashboard() {
-  const [localAccount, setLocalAccount] = useState<AccountData>({
-    fullName: "",
-    firstName: "",
-    balance: 0,
-    currency: "",
-    id: 0,
-    idUser: 0,
-    investments: {
-      total: 0,
-      fixed: 0,
-      variable: 0,
-    },
-  });
-  const [localTransactions, setLocalTransactions] = useState<TransactionData[]>(
-    []
-  );
-  const [view, setView] = useState<DashboardView>("summary");
-
-  const [sessionExpired, setSessionExpired] = useState<boolean>(false);
-
-  const pathname = usePathname();
-  const currentMenuItems = MENU_ITEMS_DASHBOARD.map((item) => ({
-    ...item,
-    current: item.path === pathname,
-  }));
+  const {
+    account,
+    dashboardView,
+    sessionExpired,
+    setAccount,
+    setTransactions,
+    setDashboardView,
+    setSessionExpired,
+  } = useAccountStore();
 
   const authController = new AuthController();
   const accountController = new AccountController();
@@ -59,30 +42,20 @@ export default function Dashboard() {
 
   async function getInitialData() {
     if (token) {
-      const account = await fetchAccount();
-      await fetchTransactions(account.id);
+      const account = await accountController.getAccountInfo(token!.id);
+      const transactions = await transactionController.getTransactions(
+        account.id
+      );
+
+      setAccount(account);
+      setTransactions(transactions);
+
       authController.refreshTokenExpiration();
     }
   }
 
-  async function fetchAccount() {
-    const updatedAccount = await accountController.getAccountInfo(token!.id);
-    setLocalAccount(updatedAccount);
-    return updatedAccount;
-  }
-
-  async function fetchTransactions(idAccount: number) {
-    const updatedTransactions =
-      await transactionController.getTransactions(idAccount);
-    setLocalTransactions(updatedTransactions);
-    return updatedTransactions;
-  }
-
   async function submitAddTransaction(transaction: TransactionForm) {
-    await transactionController.addTransaction(
-      transaction,
-      localAccount.idUser
-    );
+    await transactionController.addTransaction(transaction, account.idUser);
     await getInitialData();
   }
 
@@ -96,12 +69,13 @@ export default function Dashboard() {
     await getInitialData();
   }
 
-  async function handleLogout() {
+  function handleLogout() {
     authController.logout();
     router.push("/");
   }
 
   useEffect(() => {
+    getInitialData();
     const interval = setInterval(() => {
       if (
         !authController.isAuthenticated() ||
@@ -117,10 +91,7 @@ export default function Dashboard() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [router]);
-
-  useEffect(() => {
-    getInitialData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -156,7 +127,7 @@ export default function Dashboard() {
           }
           rightContent={
             <Box display="flex" alignItems="center" gap={2}>
-              <Typography variant="body1">{localAccount.fullName}</Typography>
+              <Typography variant="body1">{account.fullName}</Typography>
               <Link
                 href={"/"}
                 style={{ display: "flex" }}
@@ -178,23 +149,17 @@ export default function Dashboard() {
                 }}
               >
                 <FMenuList<DashboardView>
-                  menuItems={currentMenuItems}
-                  itemClick={(path) => setView(path)}
+                  menuItems={MENU_ITEMS_DASHBOARD}
+                  itemClick={(path) => setDashboardView(path)}
                 />
               </FCard>
             </Grid>
-            {view === "summary" ? (
-              <AccountSummaryContainer account={localAccount} />
-            ) : null}
+            {dashboardView === "summary" ? <AccountSummaryContainer /> : null}
 
-            {view === "investments" ? (
-              <InvestmentsContainer account={localAccount} />
-            ) : null}
+            {dashboardView === "investments" ? <InvestmentsContainer /> : null}
 
-            {view === "transactions" ? (
+            {dashboardView === "transactions" ? (
               <TransactionsContainer
-                accountBalance={localAccount.balance}
-                transactionList={localTransactions}
                 submitAddTransaction={submitAddTransaction}
                 submitEditTransaction={submitEditTransaction}
                 submitDeleteTransaction={submitDeleteTransaction}

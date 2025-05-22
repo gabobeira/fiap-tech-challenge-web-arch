@@ -13,10 +13,18 @@ export interface FAccountSummaryCardProps extends FAccountSummaryProps {
 }
 
 export function FAccountSummaryCard(props: FAccountSummaryCardProps) {
+  const {
+    balance,
+    currency,
+    firstName,
+    date,
+    isBalanceVisible,
+    toggleBalanceVisibility,
+  } = props;
   return (
     <FCard
       variant="dark"
-      title={`Olá, ${props.firstName} :)`}
+      title={`Olá, ${firstName} :)`}
       options={{
         sx: {
           height: "600px",
@@ -27,11 +35,16 @@ export function FAccountSummaryCard(props: FAccountSummaryCardProps) {
       <Grid container spacing={4}>
         <Grid size={{ md: 6, xs: 12 }}>
           <Typography variant="caption" textTransform="capitalize">
-            {props.date}
+            {date}
           </Typography>
         </Grid>
         <Grid size={{ md: 6, xs: 12 }}>
-          <FAccountSummary balance={props.balance} currency={props.currency} />
+          <FAccountSummary
+            balance={balance}
+            currency={currency}
+            isBalanceVisible={isBalanceVisible}
+            toggleBalanceVisibility={toggleBalanceVisibility}
+          />
         </Grid>
       </Grid>
 

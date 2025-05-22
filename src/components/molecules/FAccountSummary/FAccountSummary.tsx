@@ -1,19 +1,17 @@
 import { FIconButton } from "@/components/atoms/FIconButton/FIconButton";
 import { VisibilityOffTwoTone, VisibilityTwoTone } from "@mui/icons-material";
 import { Divider, Stack, Typography } from "@mui/material";
-import { useState } from "react";
 
 export interface FAccountSummaryProps {
   balance: string;
   currency: string;
+  isBalanceVisible: boolean;
+  toggleBalanceVisibility: () => void;
 }
 
 export function FAccountSummary(props: FAccountSummaryProps) {
-  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
-
-  const handleToggle = () => {
-    setIsBalanceVisible((prev) => !prev);
-  };
+  const { balance, currency, isBalanceVisible, toggleBalanceVisibility } =
+    props;
 
   return (
     <Stack spacing={1.875}>
@@ -25,8 +23,15 @@ export function FAccountSummary(props: FAccountSummaryProps) {
         >
           Saldo
         </Typography>
-        <FIconButton onClick={handleToggle} options={{ color: "secondary" }}>
-          {isBalanceVisible ? <VisibilityTwoTone /> : <VisibilityOffTwoTone />}
+        <FIconButton
+          onClick={toggleBalanceVisibility}
+          options={{ color: "secondary" }}
+        >
+          {props.isBalanceVisible ? (
+            <VisibilityTwoTone />
+          ) : (
+            <VisibilityOffTwoTone />
+          )}
         </FIconButton>
       </Stack>
       <Divider sx={{ width: 180, bgcolor: "#FF5031" }} />
@@ -42,7 +47,7 @@ export function FAccountSummary(props: FAccountSummaryProps) {
         fontSize={31}
         color="var(--mui-palette-secondary-contrastText)"
       >
-        {isBalanceVisible ? props.balance : `${props.currency} ***,**`}
+        {isBalanceVisible ? balance : `${currency} *****`}
       </Typography>
     </Stack>
   );

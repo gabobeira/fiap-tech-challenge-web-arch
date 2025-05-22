@@ -7,11 +7,11 @@ import {
   TransactionItem,
 } from "@/components";
 
-import { AccountData } from "@/domain/types/AccountTypes";
 import {
   TransactionData,
   TransactionForm,
 } from "@/domain/types/TransactionTypes";
+import { useAccountStore } from "@/stores/AccountStore";
 import { formatCurrency, formatDate } from "@/utils/formatters";
 import { Grid } from "@mui/material";
 import Image from "next/image";
@@ -19,21 +19,23 @@ import { useState } from "react";
 import { image } from "../../../../../public/assets/image";
 
 type TransactionsContainerProps = {
-  accountBalance: AccountData["balance"];
-  transactionList: TransactionData[];
   submitAddTransaction?: (transaction: TransactionForm) => void;
   submitEditTransaction?: (transaction: TransactionData) => void;
   submitDeleteTransaction?: (transactionId: string) => void;
 };
 
 export default function TransactionsContainer({
-  accountBalance,
-  transactionList,
   submitAddTransaction,
   submitEditTransaction,
   submitDeleteTransaction,
 }: TransactionsContainerProps) {
-  const formattedTransactions: TransactionItem[] = transactionList.map(
+  const { account, transactions } = useAccountStore();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTransaction, setCurrentTransaction] =
+    useState<TransactionData>();
+
+  const formattedTransactions: TransactionItem[] = transactions.map(
     (transaction) => ({
       id: transaction.id,
       type: transaction.type,
@@ -42,15 +44,8 @@ export default function TransactionsContainer({
     })
   );
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentTransaction, setCurrentTransaction] =
-    useState<TransactionData>();
-
   const openEditModal = (transactionId: string) => {
-    setCurrentTransaction(
-      transactionList.find(({ id }) => id === transactionId)
-    );
-
+    setCurrentTransaction(transactions.find(({ id }) => id === transactionId));
     setIsModalOpen(true);
   };
 
@@ -64,7 +59,7 @@ export default function TransactionsContainer({
       >
         <FTransactionFormCard
           addTransaction={submitAddTransaction}
-          accountBalance={accountBalance}
+          accountBalance={account.balance}
         >
           <Image
             src={`${image}/card-pixels-3.svg`}
@@ -99,7 +94,7 @@ export default function TransactionsContainer({
         handleClose={() => setIsModalOpen(false)}
       >
         <FTransactionForm
-          accountBalance={accountBalance}
+          accountBalance={account.balance}
           currentTransaction={currentTransaction}
           editTransaction={submitEditTransaction}
           closeEditModal={() => setIsModalOpen(false)}
