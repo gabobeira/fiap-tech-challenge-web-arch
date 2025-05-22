@@ -32,9 +32,9 @@ const initialState: AccountStoreState = {
     id: 0,
     idUser: 0,
     investments: {
-      total: 10000,
-      fixed: 7000,
-      variable: 3000,
+      total: 0,
+      fixed: 0,
+      variable: 0,
     },
   },
   transactions: [],
