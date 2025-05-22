@@ -45,7 +45,8 @@ export default function TransactionsContainer({
   );
 
   const openEditModal = (transactionId: string) => {
-    setCurrentTransaction(transactions.find(({ id }) => id === transactionId));
+    const transaction = transactions.find(({ id }) => id === transactionId) || null;
+    setCurrentTransaction(transaction);
     setIsModalOpen(true);
   };
 
