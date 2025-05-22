@@ -200,6 +200,28 @@ export default function AccountDashboard({
               flexDirection="column"
               gap={3}
             >
+              <FTransactionFormCard
+                addTransaction={handleAddTransaction}
+                accountBalance={account.balance}
+                showAll={false}
+                showInvestment={true}
+              >
+                <Image
+                  src={`${image}/card-pixels-3.svg`}
+                  alt=""
+                  layout="fill"
+                />
+                <Image
+                  src={`${image}/card-pixels-4.svg`}
+                  alt=""
+                  layout="fill"
+                />
+                <Image
+                  src={`${image}/card-illustration-2.svg`}
+                  alt=""
+                  layout="fill"
+                />
+              </FTransactionFormCard>
               <FInvestmentsCard>
                 <Image
                   src={`${image}/card-pixels-3.svg`}
@@ -226,6 +248,8 @@ export default function AccountDashboard({
                 <FTransactionFormCard
                   addTransaction={handleAddTransaction}
                   accountBalance={account.balance}
+                  showAll={false}
+                  showInvestment={false}
                 >
                   <Image
                     src={`${image}/card-pixels-3.svg`}
@@ -265,6 +289,8 @@ export default function AccountDashboard({
             editTransaction={handleEditTransaction}
             closeEditModal={() => setIsModalOpen(false)}
             buttonText="Concluir edição"
+            showAll={true}
+            showInvestment={false}
           />
         </FModal>
       </Container>

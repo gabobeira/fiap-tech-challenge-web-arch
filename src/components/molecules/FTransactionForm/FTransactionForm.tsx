@@ -26,6 +26,8 @@ export interface FTransactionFormProps {
   editTransaction?: (transaction: FTransactionFormItem) => void;
   closeEditModal?: () => void;
   buttonText?: string;
+  showInvestment: boolean;
+  showAll: boolean;
 }
 
 export function FTransactionForm({
@@ -35,6 +37,8 @@ export function FTransactionForm({
   editTransaction,
   closeEditModal,
   buttonText,
+  showInvestment,
+  showAll,
 }: FTransactionFormProps) {
   const [transactionType, setTransactionType] = useState<string>(
     currentTransaction?.type || ""
@@ -210,6 +214,8 @@ export function FTransactionForm({
           <FSelectInput
             onChange={handleSelectTransactionType}
             options={{ value: transactionType }}
+            showInvestment={showInvestment}
+            showAll={showAll}
           />
           <FInput
             options={{

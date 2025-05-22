@@ -13,13 +13,25 @@ interface SelectInputProps {
   formControlOptions?: FormControlProps;
   options?: SelectProps<string>;
   onChange?: (e: SelectChangeEvent) => void;
+  showInvestment: boolean;
+  showAll: boolean;
 }
 
 export function FSelectInput({
   formControlOptions,
   options,
   onChange,
+  showInvestment,
+  showAll,
 }: SelectInputProps) {
+  const listTransactionTypes = showInvestment
+    ? TRANSACTION_TYPES.filter((type) => type === "Investimento")
+    : TRANSACTION_TYPES.filter((type) => type !== "Investimento");
+
+  const listOptinsTransaction = showAll
+    ? TRANSACTION_TYPES
+    : listTransactionTypes;
+
   return (
     <FormControl
       fullWidth
@@ -61,7 +73,7 @@ export function FSelectInput({
           ...options?.sx,
         }}
       >
-        {TRANSACTION_TYPES.map((type, index) => (
+        {listOptinsTransaction.map((type, index) => (
           <MenuItem value={type} key={`type-${index}`}>
             {type}
           </MenuItem>

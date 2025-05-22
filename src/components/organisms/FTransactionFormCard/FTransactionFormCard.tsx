@@ -8,12 +8,16 @@ import styles from "./FTransactionFormCard.styles";
 
 interface FTransactionFormCardProps extends FTransactionFormProps {
   children?: React.ReactNode[];
+  showInvestment: boolean;
+  showAll: boolean;
 }
 
 export function FTransactionFormCard({
   children,
   accountBalance,
   addTransaction,
+  showInvestment = false,
+  showAll = true,
 }: FTransactionFormCardProps) {
   return (
     <FCard
@@ -59,6 +63,8 @@ export function FTransactionFormCard({
           accountBalance={accountBalance}
           addTransaction={addTransaction}
           buttonText="Concluir transação"
+          showInvestment={showInvestment}
+          showAll={showAll}
         />
       </Box>
     </FCard>
