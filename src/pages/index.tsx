@@ -11,7 +11,7 @@ import {
   FMenuListItem,
   FModal,
 } from "@/components";
-import FLoginPage from "@/components/molecules/FLoginForm";
+import FLoginForm from "@/components/molecules/FLoginForm";
 import FRegisterForm from "@/components/molecules/FRegisterForm";
 import { dark } from "@/components/theme";
 import { MENU_ITEMS_LANDING } from "@/constants/menuItems";
@@ -280,10 +280,14 @@ export default function LandingView({ menuItems }: LandingViewProps) {
         </FFooter>
 
         <FModal
+          title="Login"
           handleClose={() => setIsModalLoginOpen(false)}
           isOpen={isModalLoginOpen}
+          styleOptions={{
+            width: { xs: "80%", md: "40%", xl: "20%" },
+          }}
         >
-          <FLoginPage
+          <FLoginForm
             handleAlertMessageChange={setAlertMessage}
             handleOpenAlert={setShowAlert}
             handleAlertColor={setAlertColor}
@@ -291,8 +295,12 @@ export default function LandingView({ menuItems }: LandingViewProps) {
         </FModal>
 
         <FModal
+          title="Cadastro"
           handleClose={() => setIsModalRegisterOpen(false)}
           isOpen={isModalRegisteOpen}
+          styleOptions={{
+            width: { xs: "80%", md: "40%", xl: "20%" },
+          }}
         >
           <FRegisterForm
             handleAlertMessageChange={setAlertMessage}

@@ -165,8 +165,13 @@ export function FTransactionForm({
         setFileBase64(base64String);
       };
       reader.readAsDataURL(file);
-    } catch {
-      throw new Error("Erro ao fazer upload do arquivo");
+    } catch (error) {
+      setAlert({
+        severity: "error",
+        text: "Erro ao fazer upload do arquivo.",
+      });
+      setAlertOpen(true);
+      console.error(error);
     }
   };
 

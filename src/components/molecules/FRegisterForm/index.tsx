@@ -1,7 +1,7 @@
 import { FButton } from "@/components/atoms/FButton/FButton";
 import { FInput } from "@/components/atoms/FInput/FInput";
 import { AuthController } from "@/presentation/controllers/AuthController";
-import { AlertColor, Box, Container, Typography } from "@mui/material";
+import { AlertColor, Stack } from "@mui/material";
 import { useState } from "react";
 
 interface FLoginPageProps {
@@ -79,83 +79,51 @@ export default function FRegisterForm(props: FLoginPageProps) {
   };
 
   return (
-    <Box>
-      <Container
-        maxWidth="sm"
-        sx={{ backgroundColor: "var(--mui-palette-secondary-main)" }}
-      >
-        <Box
-          sx={{
-            padding: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Crie sua conta
-          </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              gap: 2,
-              marginTop: 2,
-            }}
-          >
-            <FInput
-              options={{
-                margin: "normal",
-                id: "name",
-                label: "Nome",
-                name: "name",
-                autoComplete: "name",
-                autoFocus: true,
-                value: name,
-              }}
-              textposition="left"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <FInput
-              options={{
-                margin: "normal",
-                id: "email",
-                label: "Email",
-                name: "email",
-                autoComplete: "email",
-                autoFocus: true,
-                value: email,
-              }}
-              textposition="left"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <FInput
-              options={{
-                margin: "normal",
-                name: "password",
-                label: "Senha",
-                type: "password",
-                id: "password",
-                autoComplete: "current-password",
-                value: password,
-              }}
-              textposition="left"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Box>
-          <FButton
-            innerText="Criar conta"
-            options={{
-              fullWidth: true,
-              variant: "outlined",
-              sx: { m: 2 },
-            }}
-            onClick={handleSubmit}
-          />
-        </Box>
-      </Container>
-    </Box>
+    <Stack spacing={4}>
+      <FInput
+        options={{
+          id: "name",
+          label: "Nome",
+          name: "name",
+          placeholder: "Digite seu nome",
+          autoFocus: true,
+          value: name,
+        }}
+        textposition="left"
+        onChange={(e) => setName(e.target.value)}
+      />
+      <FInput
+        options={{
+          id: "email",
+          label: "E-mail",
+          name: "email",
+          placeholder: "Digite seu e-mail",
+          value: email,
+        }}
+        textposition="left"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <FInput
+        options={{
+          name: "password",
+          label: "Senha",
+          type: "password",
+          id: "password",
+          placeholder: "Digite sua senha",
+          value: password,
+        }}
+        textposition="left"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <FButton
+        innerText="Criar conta"
+        options={{
+          fullWidth: true,
+          variant: "contained",
+          sx: { m: 2 },
+        }}
+        onClick={handleSubmit}
+      />
+    </Stack>
   );
 }

@@ -7,16 +7,15 @@ const crypto = require("crypto");
 const middlewares = jsonServer.defaults();
 const port = 5000;
 
-const oneHourMs = 60 * 60 * 1000;
-const tokenExpirationMs = 30 * 60 * 1000;
 const oneMinute = 60 * 1000;
+const halfHourMs = 30 * 60 * 1000;
 
 const config = {
   secret: crypto.randomBytes(16).toString("hex"),
-  tokenExpiration: tokenExpirationMs,
+  tokenExpiration: halfHourMs,
   saltLength: 16,
   maxLoginAttempts: 7,
-  lockTime: oneHourMs,
+  lockTime: oneMinute,
 };
 
 let attemptsLoginFails = new Map();
