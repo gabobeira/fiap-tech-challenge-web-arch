@@ -54,7 +54,9 @@ export function FInput({
                   borderWidth: 2.5,
                 },
               "& .MuiOutlinedInput-input:-webkit-autofill": {
-                boxShadow: "0 0 0 100px var(--mui-palette-primary-dark) inset",
+                WebkitBoxShadow:
+                  "0 0 0 100px var(--mui-palette-primary-light) inset",
+                WebkitTextFillColor: "var(--mui-palette-primary-dark)",
               },
             },
           },

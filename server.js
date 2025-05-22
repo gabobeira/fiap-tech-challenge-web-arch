@@ -145,11 +145,7 @@ server.post("/auth/login", (req, res) => {
   if (user) {
     const { token } = generateToken(user);
 
-    res.jsonp({
-      token,
-    });
-
-    return res.status(200).json({ token });
+    return res.status(200).jsonp({ token });
   } else {
     return res.status(401).json({ message: "Email ou senha inválidos." });
   }

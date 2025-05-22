@@ -76,6 +76,7 @@ export const dark = createTheme({
     mode: "dark",
     primary: {
       main: "#47A138",
+      light: "#E6F7DD",
       dark: "#2E6622",
       contrastText: "#FFFFFF",
     },

@@ -40,7 +40,27 @@ export default function Dashboard() {
   const router = useRouter();
   const token = authController.getToken();
 
-  async function getInitialData() {
+  function validateSession() {
+    console.log(
+      "Validando sessão",
+      authController.isAuthenticated(),
+      authController.verifyExpirationToken(),
+      token
+    );
+
+    if (
+      !authController.isAuthenticated() ||
+      authController.verifyExpirationToken()
+    ) {
+      setSessionExpired(true);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
+  }
+
+  async function fetchData() {
+    validateSession();
     if (token) {
       const account = await accountController.getAccountInfo(token!.id);
       const transactions = await transactionController.getTransactions(
@@ -56,17 +76,17 @@ export default function Dashboard() {
 
   async function submitAddTransaction(transaction: TransactionForm) {
     await transactionController.addTransaction(transaction, account.idUser);
-    await getInitialData();
+    await fetchData();
   }
 
   async function submitEditTransaction(transaction: TransactionData) {
     await transactionController.editTransaction(transaction);
-    await getInitialData();
+    await fetchData();
   }
 
   async function submitDeleteTransaction(transactionId: string) {
     await transactionController.removeTransaction(transactionId);
-    await getInitialData();
+    await fetchData();
   }
 
   function handleLogout() {
@@ -75,23 +95,7 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    getInitialData();
-    const interval = setInterval(() => {
-      if (
-        !authController.isAuthenticated() ||
-        authController.verifyExpirationToken()
-      ) {
-        setSessionExpired(true);
-        const timeout = setTimeout(() => {
-          router.push("/");
-        }, 2000);
-
-        return () => clearTimeout(timeout);
-      }
-    }, 50000);
-
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchData();
   }, []);
 
   return (
