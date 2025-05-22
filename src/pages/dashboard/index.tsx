@@ -114,7 +114,7 @@ export default function Dashboard() {
 
         return () => clearTimeout(timeout);
       }
-    }, 5000);
+    }, 50000);
 
     return () => clearInterval(interval);
   }, [router]);

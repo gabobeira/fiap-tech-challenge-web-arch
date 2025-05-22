@@ -9,6 +9,7 @@ const modalContent: SxProps = {
   padding: "24px",
   borderRadius: "8px",
   backgroundColor: "var(--mui-palette-bgCard-main)",
+  color: "var(--mui-palette-bgCard-contrastText)",
 };
 
 const styles = { modalContent };

@@ -76,6 +76,7 @@ export const dark = createTheme({
     mode: "dark",
     primary: {
       main: "#47A138",
+      dark: "#2E6622",
       contrastText: "#FFFFFF",
     },
     secondary: {
@@ -84,6 +85,12 @@ export const dark = createTheme({
     },
     tertiary: {
       main: "#004D61",
+    },
+    bgCard: {
+      main: "#FFFFFF",
+      light: "#CBCBCB",
+      dark: "#47A138",
+      contrastText: "#000000",
     },
     bgHeader: {
       main: "#000000",

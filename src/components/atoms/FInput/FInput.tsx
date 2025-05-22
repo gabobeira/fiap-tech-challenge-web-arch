@@ -24,52 +24,47 @@ export function FInput({
         },
       }}
       noValidate
-      autoComplete="off"
     >
       <TextField
         {...options}
-        id="outlined-basic"
         variant="outlined"
         slotProps={{
+          inputLabel: {
+            sx: {
+              color: "var(--mui-palette-primary-main)",
+            },
+          },
           input: {
             sx: {
-              "& input": {
-                textAlign: textposition,
-                backgroundColor: "#FFFFFF",
+              textAlign: textposition,
+              borderRadius: "8px",
+              borderWidth: 2,
+              color: "var(--mui-palette-primary-constrastText)",
+              borderColor: "var(--mui-palette-primary-main)",
+              boxShadow: "none",
+              "::placeholder": {
                 color: "var(--mui-palette-primary-main)",
-                borderColor: "var(--mui-palette-primary-main)",
-                borderRadius: "8px",
-                borderWidth: 1,
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "var(--mui-palette-primary-main)",
-                borderRadius: "8px",
-                borderWidth: 2,
               },
-              "& input::placeholder": {
-                color: "var(--mui-palette-primary-main)",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "var(--mui-palette-primary-main)",
-                borderWidth: 3,
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "var(--mui-palette-primary-main)",
-                borderWidth: 3,
-              },
-              "&.Mui-focused:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "var(--mui-palette-primary-main)",
-                borderWidth: 3,
-              },
-              "&.Mui-focused:not(:hover):not(:focused) .MuiOutlinedInput-notchedOutline":
+              "&:hover .MuiOutlinedInput-notchedOutline, &.Mui-focused .MuiOutlinedInput-notchedOutline, &.Mui-focused:hover .MuiOutlinedInput-notchedOutline":
                 {
                   borderColor: "var(--mui-palette-primary-main)",
-                  borderWidth: 3,
+                  borderWidth: 2.5,
                 },
+              "& .MuiOutlinedInput-input:-webkit-autofill": {
+                boxShadow: "0 0 0 100px var(--mui-palette-primary-dark) inset",
+              },
             },
           },
         }}
         onChange={onChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
       />
     </Box>
   );

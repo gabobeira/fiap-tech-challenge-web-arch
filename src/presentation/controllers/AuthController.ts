@@ -5,7 +5,7 @@ import { UserLoginUseCase } from "@/domain/usecases/UserLoginUseCase";
 import { UserRegisterUseCase } from "@/domain/usecases/UserRegisterUseCase";
 import { UserRepositoryImpl } from "@/infra/repositories/UserRepositoryImpl";
 
-export const msExpirationToken = 30 * 60 * 1000;
+export const halfHourMs = 30 * 60 * 1000;
 
 export class AuthController {
   private readonly userRepository: UserRepository;
@@ -21,7 +21,8 @@ export class AuthController {
 
   private setToken(token: string) {
     if (typeof window === "undefined") return;
-    const cookie = `auth_token=${token}; path=/; max-age=${msExpirationToken};`;
+
+    const cookie = `auth_token=${token}; path=/; max-age=${halfHourMs};`;
     document.cookie = cookie;
   }
 
@@ -38,7 +39,7 @@ export class AuthController {
 
   setTokenDataUser(dataUser: string) {
     if (typeof window === "undefined") return;
-    const cookie = `auth_token=${dataUser}; path=/; max-age=${msExpirationToken};`;
+    const cookie = `auth_token=${dataUser}; path=/; max-age=${halfHourMs};`;
     document.cookie = cookie;
   }
 
@@ -46,14 +47,13 @@ export class AuthController {
     const token = this.getToken();
 
     if (token) {
-      const expiration = token.expirationTime;
-
-      const atualExpitration = new Date();
+      const expirationTime = token.expirationTime;
+      const currentExpitrationTime = new Date();
 
       if (
-        atualExpitration.getTime() > Number(expiration) ||
+        currentExpitrationTime.getTime() > Number(expirationTime) ||
         (token.timestampNewExpiration &&
-          Number(token.timestampNewExpiration) > expiration + msExpirationToken)
+          Number(token.timestampNewExpiration) > expirationTime + halfHourMs)
       ) {
         this.logout();
         return true;
@@ -95,7 +95,7 @@ export class AuthController {
     if (!token) return;
 
     const now = Date.now();
-    const newExpiration = now + msExpirationToken;
+    const newExpiration = now + halfHourMs;
 
     token.expirationTime = newExpiration;
     token.timestampNewExpiration = now;
