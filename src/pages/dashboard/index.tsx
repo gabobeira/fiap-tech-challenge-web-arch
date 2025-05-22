@@ -149,7 +149,10 @@ export default function Dashboard() {
                 }}
               >
                 <FMenuList<DashboardView>
-                  menuItems={MENU_ITEMS_DASHBOARD}
+                  menuItems={MENU_ITEMS_DASHBOARD.map((item) => ({
+                    ...item,
+                    current: item.key === dashboardView,
+                  }))}
                   itemClick={(path) => setDashboardView(path)}
                 />
               </FCard>
