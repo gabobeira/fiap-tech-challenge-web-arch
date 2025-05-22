@@ -1,18 +1,14 @@
 "use client";
 import { FInvestmentsCard } from "@/components";
 
-import { AccountData } from "@/domain/types/AccountTypes";
+import { useAccountStore } from "@/stores/AccountStore";
 import { Grid } from "@mui/material";
 import Image from "next/image";
 import { image } from "../../../../../public/assets/image";
 
-type InvestmentsContainerProps = {
-  account: AccountData;
-};
+export default function InvestmentsContainer() {
+  const { account } = useAccountStore();
 
-export default function InvestmentsContainer({
-  account,
-}: InvestmentsContainerProps) {
   return (
     <Grid
       size={{ xs: 12, lg: 10 }}

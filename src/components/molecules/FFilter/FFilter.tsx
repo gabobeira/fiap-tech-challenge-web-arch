@@ -1,5 +1,5 @@
 import { TRANSACTION_TYPES } from "@/components/atoms/FSelectInput/FSelectInput.constants";
-import { useFilterStore } from "@/stores/useFilterStore";
+import { useFilterStore } from "@/stores/FilterStore";
 import {
   FormControl,
   MenuItem,

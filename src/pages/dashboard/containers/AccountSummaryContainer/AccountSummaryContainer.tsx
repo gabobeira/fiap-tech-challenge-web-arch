@@ -1,19 +1,16 @@
 "use client";
 import { FAccountSummaryCard } from "@/components";
 
-import { AccountData } from "@/domain/types/AccountTypes";
+import { useAccountStore } from "@/stores/AccountStore";
 import { formatCurrency, getFormattedDateNow } from "@/utils/formatters";
 import { Grid } from "@mui/material";
 import Image from "next/image";
 import { image } from "../../../../../public/assets/image";
 
-type AccountSummaryContainerProps = {
-  account: AccountData;
-};
+export default function AccountSummaryContainer({}) {
+  const { account, isBalanceVisible, toggleBalanceVisibility } =
+    useAccountStore();
 
-export default function AccountSummaryContainer({
-  account,
-}: AccountSummaryContainerProps) {
   const formattedBalance = formatCurrency(account.balance, account.currency);
   const formattedDate = getFormattedDateNow();
 
@@ -29,6 +26,8 @@ export default function AccountSummaryContainer({
         currency={account.currency}
         balance={formattedBalance}
         date={formattedDate}
+        isBalanceVisible={isBalanceVisible}
+        toggleBalanceVisibility={toggleBalanceVisibility}
       >
         <Image src={`${image}/card-pixels-2.svg`} alt="" fill loading="lazy" />
         <Image src={`${image}/card-pixels-1.svg`} alt="" fill loading="lazy" />
