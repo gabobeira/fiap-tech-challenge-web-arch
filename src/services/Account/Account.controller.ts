@@ -1,16 +1,32 @@
+import { AuthService } from "../AuthService";
 import { Account } from "./Account.model";
 
-export const getAccountInfo = async (idAcount: number) => {
-  const res = await fetch(`http://localhost:5000/accounts/id/${idAcount}`, {
+const getAuthorization = () => {
+  const authService = new AuthService();
+
+  const token = authService.getToken();
+  if (token) {
+    return `Bearer ${token.token}`;
+  }
+};
+
+export const getAccountInfo = async (idUser: number) => {
+  const res = await fetch(`http://localhost:5000/accounts/user/${idUser}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: getAuthorization() || "",
     },
   });
 
+  if (res.status === 401) {
+    throw new Error("Sem autorização");
+  }
+
   const data: Account = await res.json().then((res) => {
-    res.data.account.id = idAcount;
-    return res.data.account;
+    const account = res.data.find((resp: Account) => resp.idUser === idUser);
+
+    return account;
   });
 
   return new Account(data);

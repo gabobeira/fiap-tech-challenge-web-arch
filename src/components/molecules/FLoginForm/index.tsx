@@ -1,13 +1,14 @@
 import { FButton } from "@/components/atoms/FButton/FButton";
 import { FInput } from "@/components/atoms/FInput/FInput";
-import { postUserLogin } from "@/services/Auth/auth.controller";
-import { Box, Container, Typography } from "@mui/material";
+import { AuthService } from "@/services/AuthService";
+import { AlertColor, Box, Container, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 interface FLoginPageProps {
   handleAlertMessageChange: (text: string) => void;
   handleOpenAlert: (state: boolean) => void;
+  handleAlertColor: (color: AlertColor) => void;
 }
 
 export default function FLoginPage(props: FLoginPageProps) {
@@ -15,15 +16,17 @@ export default function FLoginPage(props: FLoginPageProps) {
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
 
+  const authService = new AuthService();
+
   const handleValidateForm = () => {
     let message = "";
 
     if (!email || !password) {
-      message = "Preencha todos os campos";
+      message = "Atenção! Preencha todos os campos.";
     } else if (password.length < 6) {
-      message = "A senha deve ter pelo menos 6 caracteres";
+      message = "Atenção! A senha deve ter pelo menos 6 caracteres.";
     } else if (!email.includes("@") || !email.includes(".")) {
-      message = "Informe um email válido";
+      message = "Atenção! Informe um email válido.";
     }
 
     return message;
@@ -37,17 +40,26 @@ export default function FLoginPage(props: FLoginPageProps) {
     if (validationMessage) {
       props.handleAlertMessageChange(validationMessage);
       props.handleOpenAlert(true);
+      props.handleAlertColor("info");
       return;
     }
 
     try {
-      const respLogin = await postUserLogin(email, password);
+      const respLogin = await authService.login(email, password);
       console.log("respLogin", respLogin);
 
+      props.handleAlertMessageChange("Login realizado com sucesso!");
+      props.handleAlertColor("success");
+      props.handleOpenAlert(true);
+
       router.push("/dashboard");
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_) {
-      props.handleAlertMessageChange("Credenciais inválidas");
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const backendMessage = error.message || "Erro ao realizar login.";
+
+      props.handleAlertMessageChange(backendMessage);
+      props.handleAlertColor("error");
       props.handleOpenAlert(true);
     }
   };

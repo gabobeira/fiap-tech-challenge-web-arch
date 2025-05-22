@@ -12,10 +12,18 @@ import {
   FModal,
 } from "@/components";
 import FLoginPage from "@/components/molecules/FLoginForm";
+import FRegisterForm from "@/components/molecules/FRegisterForm";
 import { dark } from "@/components/theme";
 import { MENU_ITEMS_LANDING } from "@/constants/menuItems";
 import ThemeProviderWrapper from "@/theme/ThemeProviderWrapper";
-import { Box, Container, Grid, Link, Typography } from "@mui/material";
+import {
+  AlertColor,
+  Box,
+  Container,
+  Grid,
+  Link,
+  Typography,
+} from "@mui/material";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -43,6 +51,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
   const [isModalRegisteOpen, setIsModalRegisterOpen] = useState<boolean>(false);
   const [isModalLoginOpen, setIsModalLoginOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertColor, setAlertColor] = useState<AlertColor>("error");
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
   // const router = useRouter();
@@ -50,13 +59,9 @@ export default function LandingView({ menuItems }: LandingViewProps) {
   const actionsHome: FAccountButtonActions = {
     handleNewAccount: async () => {
       setIsModalRegisterOpen(true);
-
-      // router.push("/dashboard");
     },
     handleLogin: async () => {
       setIsModalLoginOpen(true);
-
-      // router.push("/dashboard");
     },
   };
 
@@ -272,6 +277,7 @@ export default function LandingView({ menuItems }: LandingViewProps) {
           <FLoginPage
             handleAlertMessageChange={setAlertMessage}
             handleOpenAlert={setShowAlert}
+            handleAlertColor={setAlertColor}
           />
         </FModal>
 
@@ -279,15 +285,17 @@ export default function LandingView({ menuItems }: LandingViewProps) {
           handleClose={() => setIsModalRegisterOpen(false)}
           isOpen={isModalRegisteOpen}
         >
-          <FLoginPage
+          <FRegisterForm
             handleAlertMessageChange={setAlertMessage}
             handleOpenAlert={setShowAlert}
+            handleAlertColor={setAlertColor}
+            handleSucessRegister={() => setIsModalRegisterOpen(false)}
           />
         </FModal>
       </main>
       {alertMessage && (
         <FAlert
-          severity="error"
+          severity={alertColor}
           text={alertMessage}
           open={showAlert}
           onClose={() => setShowAlert(false)}

@@ -1,6 +1,7 @@
 "use client";
 import {
   FAccountSummaryCard,
+  FAlert,
   FCard,
   FInvestmentsCard,
   FMenuList,
@@ -14,6 +15,7 @@ import {
 } from "@/components";
 import { DashboardView, MENU_ITEMS_DASHBOARD } from "@/constants/menuItems";
 import { Account } from "@/services/Account/Account.model";
+import { AuthService } from "@/services/AuthService";
 import {
   Transaction,
   TransactionData,
@@ -27,6 +29,7 @@ import {
 import { Container, Grid } from "@mui/material";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import router from "next/router";
 import { useEffect, useState } from "react";
 import { image } from "../../../../../public/assets/image";
 
@@ -51,6 +54,27 @@ export default function AccountDashboard({
   const loadData = async () => {
     getInitialData();
   };
+  const [sessionExpired, setSessionExpired] = useState<boolean>(false);
+
+  const authService = new AuthService();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (
+        !authService.isAuthenticated() ||
+        authService.verifyExpirationToken()
+      ) {
+        setSessionExpired(true);
+        const timeout = setTimeout(() => {
+          router.push("/");
+        }, 2000);
+
+        return () => clearTimeout(timeout);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [router]);
 
   useEffect(() => {
     loadData();
@@ -94,7 +118,7 @@ export default function AccountDashboard({
     const editedTransaction: TransactionData = {
       ...transaction,
       currency: "R$",
-      idAccount: 1,
+      idAccount: account.id,
       date: new Date().toISOString(),
     };
 
@@ -109,6 +133,7 @@ export default function AccountDashboard({
     const newTransaction: TransactionInput = {
       ...transaction,
       currency: "R$",
+      idAccount: account.id,
 
       date: new Date().toISOString(),
     };
@@ -124,6 +149,14 @@ export default function AccountDashboard({
         backgroundColor: "var(--mui-palette-tertiary-light)",
       }}
     >
+      {sessionExpired && (
+        <FAlert
+          severity="warning"
+          open={true}
+          text="Sua sessão expirou, faça login novamente!"
+          onClose={() => {}}
+        />
+      )}
       <Container maxWidth="xl">
         <Grid container spacing={3} paddingTop={3} paddingBottom={3}>
           <Grid size={{ xs: 0, lg: 2 }}>

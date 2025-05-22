@@ -1,29 +1,7 @@
-import { AuthData, AuthModel } from "./auth.model";
+import { AuthData, AuthTokenModel } from "./auth.model";
 
 export const postUserLogin = async (email: string, password: string) => {
   const res = await fetch("http://localhost:5000/auth/login", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  });
-
-  const user: AuthModel = await res.json().then((res) => {
-    email = res.data.user.email;
-    password = res.data.user.password;
-    return res.data.user;
-  });
-
-  if (user) {
-    return new AuthData(user);
-  } else {
-    throw new Error("Invalid email or password");
-  }
-};
-
-export const postUserRegister = async (email: string, password: string) => {
-  const res = await fetch("http://localhost:5000/auth/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -31,15 +9,54 @@ export const postUserRegister = async (email: string, password: string) => {
     body: JSON.stringify({ email, password }),
   });
 
-  const user: AuthModel = await res.json().then((res) => {
-    email = res.data.user.email;
-    password = res.data.user.password;
-    return res.data.user;
+  if (res.status === 401) {
+    throw new Error("Sem autorização");
+  }
+
+  const response = await res.json();
+
+  if (response?.message) {
+    throw new Error(response.message);
+  }
+
+  const userData = response;
+
+  if (userData) {
+    const userTokenData = JSON.parse(
+      userData.token.split("::")[1]
+    ) as AuthTokenModel;
+    return userTokenData;
+  } else {
+    throw new Error("Email ou senha inválidos");
+  }
+};
+
+export const postUserRegister = async (
+  name: string,
+  email: string,
+  password: string
+) => {
+  const res = await fetch("http://localhost:5000/auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, email, password }),
   });
 
-  if (user) {
-    return new AuthData(user);
+  if (!res.ok) {
+    throw new Error("Erro ao criar conta");
+  }
+
+  const response = await res.json();
+
+  if (response?.message) {
+    throw new Error(response.message);
+  }
+
+  if (response?.user) {
+    return new AuthData(response.user);
   } else {
-    throw new Error("Invalid email or password");
+    throw new Error("Conta inválida");
   }
 };

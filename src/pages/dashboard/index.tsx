@@ -2,6 +2,7 @@
 import { FHeader, FMenuDropdown } from "@/components";
 import { getAccountInfo } from "@/services/Account/Account.controller";
 import { Account } from "@/services/Account/Account.model";
+import { AuthService } from "@/services/AuthService";
 import {
   addTransaction,
   deleteTransaction,
@@ -18,11 +19,12 @@ import { AccountCircle } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import AccountDashboard from "./components/AccountDashboard/AccountDashboard";
 
 export default function DashboardView() {
-  const account: Account = {
+  const accountDefault: Account = {
     fullName: "",
     firstName: "",
     balance: 0,
@@ -33,43 +35,52 @@ export default function DashboardView() {
 
   const transactions: Transaction[] = [];
 
-  const [localAccount, setLocalAccount] = useState(account);
+  const [localAccount, setLocalAccount] = useState(accountDefault);
   const [localTransactions, setLocalTransactions] = useState(transactions);
 
+  const authService = new AuthService();
+  const router = useRouter();
+  const token = authService.getToken();
+
   async function getInitialData() {
-    await fetchAccount();
-    await fetchTransactions();
+    if (token) {
+      const account = await fetchAccount();
+      await fetchTransactions(account.id);
+      authService.refreshTokenExpiration();
+    }
   }
 
   async function fetchAccount() {
-    const updatedTransactions = await getAccountInfo(1);
-    setLocalAccount(updatedTransactions);
+    const updatedAccount = await getAccountInfo(token!.id);
+    setLocalAccount(updatedAccount);
+    return updatedAccount;
   }
 
-  async function fetchTransactions() {
-    const updatedTransactions = await getTransactions();
+  async function fetchTransactions(idAccount: number) {
+    const updatedTransactions = await getTransactions(idAccount);
     setLocalTransactions(updatedTransactions);
+    return updatedTransactions;
   }
 
   async function submitAddTransaction(transaction: TransactionInput) {
     await addTransaction(transaction);
 
-    const updatedTransactions = await getTransactions();
-    setLocalTransactions(updatedTransactions);
+    await getInitialData();
   }
 
   async function submitEditTransaction(transaction: TransactionData) {
     await editTransaction(transaction);
-    setLocalTransactions(
-      localTransactions.map((t) => (t.id === transaction.id ? transaction : t))
-    );
+    await getInitialData();
   }
 
   async function submitDeleteTransaction(transactionId: string) {
     await deleteTransaction(transactionId);
-    setLocalTransactions(
-      localTransactions.filter((t) => t.id !== transactionId)
-    );
+    await getInitialData();
+  }
+
+  async function handleLogout() {
+    authService.logout();
+    router.push("/");
   }
 
   return (
@@ -91,7 +102,7 @@ export default function DashboardView() {
         rightContent={
           <Box display="flex" alignItems="center" gap={2}>
             <Typography variant="body1">{localAccount.fullName}</Typography>
-            <Link href={"/"} style={{ display: "flex" }}>
+            <Link href={"/"} style={{ display: "flex" }} onClick={handleLogout}>
               <AccountCircle color="secondary" sx={{ fontSize: 40 }} />
             </Link>
           </Box>

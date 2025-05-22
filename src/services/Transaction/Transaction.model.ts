@@ -3,6 +3,7 @@ export interface TransactionInput {
   value: number;
   currency: string;
   date: string;
+  idAccount: number;
 }
 
 export interface TransactionData {

@@ -5,6 +5,15 @@ export interface AuthModel {
   password: string;
 }
 
+export interface AuthTokenModel {
+  id: number;
+  email: string;
+  token: string;
+  expirationTime: number;
+  timestampLogin: number;
+  timestampNewExpiration: number;
+}
+
 export class AuthData {
   readonly id: number;
   readonly name: string;

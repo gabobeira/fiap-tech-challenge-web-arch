@@ -1,27 +1,31 @@
 {
-  "auth": {
-    "id": 1,
-    "name": "Joana da Silva Oliveira",
-    "email": "joana@gmail.com",
-    "password": "123456"
-  },
-  "accounts": {
-    "id": 1,
-    "fullName": "Joana da Silva Oliveira",
-    "firstName": "Joana",
-    "balance": 2500,
-    "currency": "R$",
-    "idUser": 1
-  },
+  "auth": [
+    {
+      "id": 1,
+      "name": "Joana da Silva Oliveira",
+      "email": "joana@gmail.com",
+      "password": "123456"
+    }
+  ],
+  "accounts": [
+    {
+      "id": 1,
+      "fullName": "Joana da Silva Oliveira",
+      "firstName": "Joana",
+      "balance": 2500,
+      "currency": "R$",
+      "idUser": 1
+    }
+  ],
   "transactions": [
     {
+      "id": 1,
       "type": "Depósito",
-      "value": 50,
+      "value": 2500,
       "fileBase64": "",
       "fileName": "",
       "currency": "R$",
       "date": "2025-05-14T21:56:18.720Z",
-      "id": 1,
       "idAccount": 1
     }
   ]
