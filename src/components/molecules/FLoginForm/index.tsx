@@ -1,6 +1,6 @@
 import { FButton } from "@/components/atoms/FButton/FButton";
 import { FInput } from "@/components/atoms/FInput/FInput";
-import { AuthService } from "@/services/AuthService";
+import { AuthController } from "@/presentation/controllers/AuthController";
 import { AlertColor, Box, Container, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -16,7 +16,7 @@ export default function FLoginPage(props: FLoginPageProps) {
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
 
-  const authService = new AuthService();
+  const authController = new AuthController();
 
   const handleValidateForm = () => {
     let message = "";
@@ -45,8 +45,7 @@ export default function FLoginPage(props: FLoginPageProps) {
     }
 
     try {
-      const respLogin = await authService.login(email, password);
-      console.log("respLogin", respLogin);
+      await authController.login(email, password);
 
       props.handleAlertMessageChange("Login realizado com sucesso!");
       props.handleAlertColor("success");

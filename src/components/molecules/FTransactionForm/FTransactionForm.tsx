@@ -1,23 +1,17 @@
 import { FAlert } from "@/components/atoms/FAlert/FAlert";
 import { FButton } from "@/components/atoms/FButton/FButton";
-import { FChip } from "@/components/atoms/FChip/FChip";
 import { FInput } from "@/components/atoms/FInput/FInput";
 import { FInputFile } from "@/components/atoms/FInputFile/FInputFile";
 import { FSelectInput } from "@/components/atoms/FSelectInput/FSelectInput";
+import {
+  TransactionData,
+  TransactionForm,
+} from "@/domain/types/TransactionTypes";
 import { AlertColor, Box, SelectChangeEvent, Stack } from "@mui/material";
 import { useState } from "react";
 
-export interface FTransactionFormItemInput {
-  type: string;
-  value: number;
-  fileBase64?: string;
-  fileName?: string;
-  idAccount?: number;
-}
-
-export interface FTransactionFormItem extends FTransactionFormItemInput {
-  id: string;
-}
+export type FTransactionFormItemInput = TransactionForm;
+export type FTransactionFormItem = TransactionData;
 
 export interface FTransactionFormProps {
   accountBalance: number;
@@ -39,14 +33,12 @@ export function FTransactionForm({
   const [transactionType, setTransactionType] = useState<string>(
     currentTransaction?.type || ""
   );
-
   const [transactionValue, setTransactionValue] = useState<number>(
     currentTransaction?.value || 0
   );
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileBase64, setFileBase64] = useState<string | null>(null);
 
-  // TODO: Use constants for those plain string values (Currently we have those mapped on an array in the component lib - FSelectInput.constants.js)
   const isAddValueAccount = ["Depósito", "Empréstimo"].includes(
     transactionType
   );
@@ -132,23 +124,6 @@ export function FTransactionForm({
     setFileBase64(null);
   };
 
-  const onChangeNewValue = (value: number) => {
-    setTransactionValue(value);
-  };
-
-  const handleValueClick = (valueAdded: number) => {
-    const newValue: number = transactionValue + valueAdded;
-
-    if (newValue > accountBalance && !isAddValueAccount) {
-      setAlert({ severity: "warning", text: "Saldo insuficiente!" });
-      setAlertOpen(true);
-      return;
-    }
-
-    setTransactionValue(newValue);
-    onChangeNewValue(newValue);
-  };
-
   const handleCloseAlert = () => {
     setAlertOpen(false);
   };
@@ -190,8 +165,8 @@ export function FTransactionForm({
         setFileBase64(base64String);
       };
       reader.readAsDataURL(file);
-    } catch (error) {
-      console.log(error);
+    } catch {
+      throw new Error("Erro ao fazer upload do arquivo");
     }
   };
 
@@ -221,15 +196,6 @@ export function FTransactionForm({
             textposition="center"
             onChange={handleInputTransactionValue}
           />
-          <Stack spacing={2} direction="row">
-            <FChip valueAdd={20} handleValueClick={handleValueClick} />
-            <FChip valueAdd={50} handleValueClick={handleValueClick} />
-            <FChip valueAdd={100} handleValueClick={handleValueClick} />
-            <FChip
-              valueAdd={isAddValueAccount ? 500 : (accountBalance ?? 0)}
-              handleValueClick={handleValueClick}
-            />
-          </Stack>
           <FInputFile
             innerText="Anexar comprovante"
             onUploadFile={onUploadFile}

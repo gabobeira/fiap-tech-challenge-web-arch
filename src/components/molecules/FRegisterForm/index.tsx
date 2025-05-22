@@ -1,6 +1,6 @@
 import { FButton } from "@/components/atoms/FButton/FButton";
 import { FInput } from "@/components/atoms/FInput/FInput";
-import { postUserRegister } from "@/services/Auth/auth.controller";
+import { AuthController } from "@/presentation/controllers/AuthController";
 import { AlertColor, Box, Container, Typography } from "@mui/material";
 import { useState } from "react";
 
@@ -15,6 +15,8 @@ export default function FRegisterForm(props: FLoginPageProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
+
+  const authController = new AuthController();
 
   const handleValidateForm = () => {
     let message = "";
@@ -56,7 +58,7 @@ export default function FRegisterForm(props: FLoginPageProps) {
     }
 
     try {
-      const respRegister = await postUserRegister(name, email, password);
+      const respRegister = await authController.register(name, email, password);
 
       if (respRegister) {
         props.handleAlertMessageChange("Conta criada com sucesso!");

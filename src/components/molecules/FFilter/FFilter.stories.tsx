@@ -17,9 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onFilterChange: (filterTypes: string[]) => {
-      console.log("Selected filter types:", filterTypes);
-    },
+    onFilterChange: (filterTypes: string[]) => {},
     showSelect: false,
   },
   render: (args) => {

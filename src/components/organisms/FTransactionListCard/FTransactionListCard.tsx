@@ -43,7 +43,7 @@ export function FTransactionListCard({
   }, [transactionItems, filterTypes]);
 
   return (
-    <FCard>
+    <FCard options={{ sx: { height: "700px" } }}>
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -71,7 +71,7 @@ export function FTransactionListCard({
       </Stack>
       <Container
         sx={{
-          height: "600px",
+          height: "100%",
           overflowY: "visible",
           overflowX: "hidden",
         }}

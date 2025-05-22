@@ -4,6 +4,7 @@ interface FButtonProps {
   innerText?: string;
   options?: ButtonProps;
   onClick?: () => void;
+  children?: React.ReactNode;
 }
 
 export function FButton(props: FButtonProps) {
@@ -21,11 +22,12 @@ export function FButton(props: FButtonProps) {
     >
       {props.innerText && (
         <Box padding={2}>
-          <Typography variant="body1" fontWeight={600}>
+          <Typography variant="body1" fontWeight={500}>
             {props.innerText}
           </Typography>
         </Box>
       )}
+      {props.children}
     </Button>
   );
 }

@@ -2,13 +2,18 @@ import { FInvestmentStat } from "@/components/atoms/FInvestmentStat/FInvestmentS
 import { FCard } from "@/components/molecules/FCard/FCard";
 import { FPieChart } from "@/components/molecules/FPieChart/FPieChart";
 import styles from "@/components/organisms/FInvestmentsCard/FInvestmentsCard.styles";
+import { AccountData } from "@/domain/types/AccountTypes";
+import { formatCurrency } from "@/utils/formatters";
 import { Box, Grid, Typography } from "@mui/material";
 
 interface FInvestmentsCardProps {
+  account: AccountData;
   children?: React.ReactNode[];
 }
 
-export function FInvestmentsCard({ children }: FInvestmentsCardProps) {
+export function FInvestmentsCard({ account, children }: FInvestmentsCardProps) {
+  const { investments, currency } = account;
+
   return (
     <FCard
       title="Investimentos"
@@ -45,7 +50,9 @@ export function FInvestmentsCard({ children }: FInvestmentsCardProps) {
 
       <Box width={{ xs: "100%", sm: "100%" }}>
         <Box>
-          <Typography variant="h6">Total: R$ 50.000,00</Typography>
+          <Typography variant="h6">
+            Total: {formatCurrency(investments?.total || 0, currency)}
+          </Typography>
           <Grid
             container
             spacing={2}
@@ -61,12 +68,12 @@ export function FInvestmentsCard({ children }: FInvestmentsCardProps) {
             >
               <FInvestmentStat
                 label="Renda Fixa"
-                value="R$ 36.000,00"
+                value={formatCurrency(investments?.fixed || 0, currency)}
                 backgroundColor="#004D61"
               />
               <FInvestmentStat
                 label="Renda Variável"
-                value="R$ 14.000,00"
+                value={formatCurrency(investments?.variable || 0, currency)}
                 backgroundColor="#004D61"
               />
             </Grid>

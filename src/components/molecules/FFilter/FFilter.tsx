@@ -1,4 +1,5 @@
 import { TRANSACTION_TYPES } from "@/components/atoms/FSelectInput/FSelectInput.constants";
+import { useFilterStore } from "@/stores/useFilterStore";
 import {
   FormControl,
   MenuItem,
@@ -6,15 +7,14 @@ import {
   SelectChangeEvent,
   Stack,
 } from "@mui/material";
-import { useState } from "react";
 
 interface FFilterProps {
   onFilterChange: (filterTypes: string[]) => void;
-  showSelect: Boolean;
+  showSelect: boolean;
 }
 
 export function FFilter({ onFilterChange, showSelect }: FFilterProps) {
-  const [filterSelected, setFilterSelected] = useState<string[]>([""]);
+  const { filterSelected, setFilterSelected, resetFilter } = useFilterStore();
 
   const handleFilterChange = (
     event: SelectChangeEvent<typeof filterSelected>
@@ -32,7 +32,7 @@ export function FFilter({ onFilterChange, showSelect }: FFilterProps) {
       setFilterSelected(updatedValues);
       onFilterChange(updatedValues);
     } else {
-      setFilterSelected([""]);
+      resetFilter();
       onFilterChange(TRANSACTION_TYPES);
     }
   };
