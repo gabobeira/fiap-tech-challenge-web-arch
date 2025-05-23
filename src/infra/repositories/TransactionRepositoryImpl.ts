@@ -4,6 +4,7 @@ import {
   TransactionParams,
 } from "@/domain/types/TransactionTypes";
 import { AuthController } from "@/presentation/controllers/AuthController";
+import { Observable, from, switchMap, throwError, map, catchError } from "rxjs";
 
 export class TransactionRepositoryImpl implements TransactionRepository {
   private readonly baseUrl: string = "http://localhost:5000";
@@ -17,81 +18,92 @@ export class TransactionRepositoryImpl implements TransactionRepository {
     }
   }
 
-  async getTransactions(idAccount: number): Promise<TransactionData[]> {
-    const res = await fetch(
-      `${this.baseUrl}/transactions/account/${idAccount}`,
-      {
+  getTransactions(idAccount: number): Observable<TransactionData[]> {
+    return from(
+      fetch(`${this.baseUrl}/transactions/account/${idAccount}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: this.getAuthorization() || "",
         },
         cache: "no-store",
-      }
+      })
+    ).pipe(
+      switchMap((res) => {
+        if (res.status === 401) {
+          return throwError(() => new Error("Sem autorização"));
+        }
+        return from(res.json());
+      }),
+      map((json) => {
+        return json.data as TransactionData[];
+      }),
+      catchError((err) => {
+        console.error("Erro ao buscar transações:", err);
+        return throwError(() => err);
+      })
     );
-
-    if (res.status === 401) {
-      throw new Error("Sem autorização");
-    }
-
-    return await res.json().then((res) => {
-      idAccount = res.data.idAccount;
-      return res.data;
-    });
   }
 
-  async createTransaction(
+  createTransaction(
     transactionParams: TransactionParams
-  ): Promise<TransactionData> {
-    const res = await fetch(`${this.baseUrl}/transactions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: this.getAuthorization() || "",
-      },
-      body: JSON.stringify(transactionParams),
-    });
-
-    if (res.status === 401) {
-      throw new Error("Sem autorização");
-    }
-
-    return await res.json();
+  ): Observable<TransactionData> {
+    return from(
+      fetch(`${this.baseUrl}/transactions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.getAuthorization() || "",
+        },
+        body: JSON.stringify(transactionParams),
+      })
+    ).pipe(
+      switchMap((res) => {
+        if (res.status === 401) {
+          return throwError(() => new Error("Sem autorização"));
+        }
+        return from(res.json());
+      })
+    );
   }
 
-  async updateTransaction(
-    transactionData: TransactionData
-  ): Promise<TransactionData> {
-    const res = await fetch(
-      `${this.baseUrl}/transactions/${transactionData.id}`,
-      {
+  updateTransaction(transactionData: TransactionData) {
+    return from(
+      fetch(`${this.baseUrl}/transactions/${transactionData.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: this.getAuthorization() || "",
         },
         body: JSON.stringify(transactionData),
-      }
+      })
+    ).pipe(
+      switchMap((res) => {
+        if (res.status === 401) {
+          return throwError(() => new Error("Sem autorização"));
+        }
+        return from(res.json());
+      })
     );
-
-    if (res.status === 401) {
-      throw new Error("Sem autorização");
-    }
-
-    return await res.json();
   }
 
-  async deleteTransaction(transactionId: string): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/transactions/${transactionId}`, {
+  deleteTransaction(transactionId: string) {
+    const url = `${this.baseUrl}/transactions/${transactionId}`;
+    const options = {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: this.getAuthorization() || "",
       },
-    });
+    };
 
-    if (res.status === 401) {
-      throw new Error("Sem autorização");
-    }
+    return from(fetch(url, options)).pipe(
+      map((res) => {
+        if (res.status === 401) {
+          throw new Error("Sem autorização");
+        }
+        return;
+      })
+    );
   }
 }

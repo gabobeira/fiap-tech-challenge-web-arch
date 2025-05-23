@@ -5,64 +5,78 @@ import {
   UserRegisterParams,
   UserToken,
 } from "@/domain/types/UserType";
+import { Observable, from, switchMap, throwError, catchError } from "rxjs";
 
 export class UserRepositoryImpl implements UserRepository {
   private readonly baseUrl: string = "http://localhost:5000";
 
-  async login({ email, password }: UserLoginParams): Promise<UserToken> {
-    const res = await fetch(`${this.baseUrl}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (res.status === 401) {
-      throw new Error("Sem autorização");
-    }
-
-    const response = await res.json();
-
-    if (response?.message) {
-      throw new Error(response.message);
-    }
-
-    const userData = response;
-
-    if (userData) {
-      const userTokenData = JSON.parse(
-        userData.token.split("::")[1]
-      ) as UserToken;
-      return userTokenData;
-    } else {
-      throw new Error("Email ou senha inválidos");
-    }
+  login({ email, password }: UserLoginParams): Observable<UserToken> {
+    return from(
+      fetch(`${this.baseUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+    ).pipe(
+      switchMap((res) => {
+        if (res.status === 401) {
+          return throwError(() => new Error("Sem autorização"));
+        }
+        return from(res.json()).pipe(
+          switchMap((response) => {
+            if (response?.message) {
+              return throwError(() => new Error(response.message));
+            }
+            const userData = response;
+            if (userData) {
+              const userTokenData = JSON.parse(
+                userData.token.split("::")[1]
+              ) as UserToken;
+              return new Observable<UserToken>((subscriber) => {
+                subscriber.next(userTokenData);
+                subscriber.complete();
+              });
+            } else {
+              return throwError(() => new Error("Email ou senha inválidos"));
+            }
+          })
+        );
+      }),
+      catchError((err) => throwError(() => err))
+    );
   }
 
-  async register({ name, email, password }: UserRegisterParams): Promise<User> {
-    const res = await fetch("http://localhost:5000/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Erro ao criar conta");
-    }
-
-    const response = await res.json();
-
-    if (response?.message) {
-      throw new Error(response.message);
-    }
-
-    if (response?.user) {
-      return new User(response.user);
-    } else {
-      throw new Error("Conta inválida");
-    }
+  register({ name, email, password }: UserRegisterParams): Observable<User> {
+    return from(
+      fetch("http://localhost:5000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      })
+    ).pipe(
+      switchMap((response) => {
+        if (!response.ok) {
+          return throwError(() => new Error("Erro ao criar conta"));
+        }
+        return response.json();
+      }),
+      switchMap((response) => {
+        if (response?.message) {
+          return throwError(() => new Error(response.message));
+        }
+        if (response?.user) {
+          return new Observable<User>((subscriber) => {
+            subscriber.next(new User(response.user));
+            subscriber.complete();
+          });
+        } else {
+          return throwError(() => new Error("Conta inválida"));
+        }
+      })
+    );
   }
 }

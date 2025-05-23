@@ -173,9 +173,9 @@ Para buildar o app basta executar `npm run build`.
 - [Lazy Loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Lazy_loading): Técnica que atrasa o carregamento de recursos ou dados até que sejam realmente necessários.
 - [Atomic design](https://atomicdesign.bradfrost.com/chapter-2/): Para componentização separada em categorias, possibilitando mais reutilização e semântica.
 - [Colocation](https://kentcdodds.com/blog/colocation): Para organização dos diretórios e maior facilidade de trabalho.
-- [Authentication](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Guides/Authentication) Estrutura de cadastro e login para proteção do sistema.
+- [Authentication](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Guides/Authentication): Estrutura de cadastro e login para proteção do sistema.
 - [Salt + Hashing](https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/): Técnica de criptografia para dados de autenticação.
-- [JWT](https://jwt.io/) JSON Web Tokens para armazenar informações do usuário e tempo de expiração, permitindo a autenticação contínua.
+- [JWT](https://jwt.io/): JSON Web Tokens para armazenar informações do usuário e tempo de expiração, permitindo a autenticação contínua.
 
 ## Outras ferramentas úteis
 
