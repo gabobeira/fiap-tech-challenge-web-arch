@@ -1,3 +1,4 @@
+import { firstValueFrom } from "rxjs";
 import { Transaction } from "../entities/Transaction";
 import { TransactionRepository } from "../repositories/TransactionRepository";
 import { TransactionData } from "../types/TransactionTypes";
@@ -7,7 +8,7 @@ export class UpdateTransactionUseCase {
 
   async execute(transactionData: TransactionData): Promise<Transaction> {
     const data =
-      await this.transactionRespository.updateTransaction(transactionData);
+      await firstValueFrom(this.transactionRespository.updateTransaction(transactionData));
 
     return new Transaction(data);
   }

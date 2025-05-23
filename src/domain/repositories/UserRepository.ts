@@ -1,3 +1,4 @@
+import { Observable } from "rxjs";
 import { User } from "../entities/User";
 import {
   UserLoginParams,
@@ -6,6 +7,6 @@ import {
 } from "../types/UserType";
 
 export interface UserRepository {
-  login(params: UserLoginParams): Promise<UserToken>;
-  register(params: UserRegisterParams): Promise<User>;
+  login(params: UserLoginParams): Observable<UserToken>;
+  register(params: UserRegisterParams): Observable<User>;
 }

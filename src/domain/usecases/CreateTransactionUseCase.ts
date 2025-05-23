@@ -1,3 +1,4 @@
+import { firstValueFrom } from "rxjs";
 import { Transaction } from "../entities/Transaction";
 import { AccountRepository } from "../repositories/AccountRepository";
 import { TransactionRepository } from "../repositories/TransactionRepository";
@@ -13,7 +14,7 @@ export class CreateTransactionUseCase {
     transactionForm: TransactionForm,
     idUser: number
   ): Promise<Transaction> {
-    const account = await this.accountRepository.getAccountInfo(idUser);
+    const account = await firstValueFrom(this.accountRepository.getAccountInfo(idUser));
 
     const transactionParams: TransactionParams = {
       ...transactionForm,
@@ -23,7 +24,7 @@ export class CreateTransactionUseCase {
     };
 
     const data =
-      await this.transactionRespository.createTransaction(transactionParams);
+      await firstValueFrom(this.transactionRespository.createTransaction(transactionParams));
 
     return new Transaction(data);
   }
