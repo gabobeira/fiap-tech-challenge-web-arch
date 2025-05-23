@@ -1,11 +1,11 @@
-import { TransactionData } from "../types/TransactionTypes";
+import { TransactionData, TransactionType } from "../types/TransactionTypes";
 
 export class Transaction {
   private readonly id: string;
   private readonly date: string;
   private readonly value: number;
   private readonly currency: string;
-  private readonly type: string;
+  private readonly type: TransactionType;
   private readonly fileBase64: string;
   private readonly fileName: string;
   private readonly idAccount: number;
@@ -37,7 +37,7 @@ export class Transaction {
     return this.currency;
   }
 
-  getType(): string {
+  getType(): TransactionType {
     return this.type;
   }
 

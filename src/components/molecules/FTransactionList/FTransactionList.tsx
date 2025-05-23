@@ -16,22 +16,21 @@ export function FTransactionList({
   editTransaction,
   deleteTransaction,
 }: FTransactionListProps) {
-  const ITEMS_PER_PAGE = 7;
+  const ITEMS_PER_PAGE = 6;
   const [page, setPage] = useState(1);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
-  const paginatedItems = transactionItems.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
-  );
+  const paginatedItems = transactionItems
+    .reverse()
+    .slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+
   const handleDelete = (transactionId: string) => {
     if (!deleteTransaction) {
       return;
     }
-
     deleteTransaction(transactionId);
   };
 
@@ -41,12 +40,13 @@ export function FTransactionList({
         <Stack>
           <List>
             {paginatedItems.map(
-              ({ id, formattedDate, type, formattedValue }) => (
+              ({ id, formattedDate, type, formattedValue, fileName }) => (
                 <FTransactionItem
                   key={`transaction-item-${id}`}
                   formattedDate={formattedDate}
                   formattedValue={formattedValue}
                   type={type}
+                  fileName={fileName}
                   onDelete={() => handleDelete(id)}
                   onEdit={() => editTransaction && editTransaction(id)}
                 />
@@ -57,7 +57,7 @@ export function FTransactionList({
             <Pagination
               count={Math.ceil(transactionItems.length / ITEMS_PER_PAGE)}
               page={page}
-              onChange={handleChangePage}
+              onChange={(_, page) => handleChangePage(page)}
               showFirstButton
               showLastButton
             />

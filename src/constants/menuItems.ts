@@ -1,8 +1,6 @@
 import { FMenuListItem } from "@/components";
 
-export type DashboardView = "summary" | "transactions" | "investments";
-
-export const MENU_ITEMS_DASHBOARD: FMenuListItem<DashboardView>[] = [
+export const MENU_ITEMS_DASHBOARD: FMenuListItem[] = [
   {
     label: "Início",
     path: "/",
@@ -20,7 +18,7 @@ export const MENU_ITEMS_DASHBOARD: FMenuListItem<DashboardView>[] = [
   },
 ];
 
-export const MENU_ITEMS_LANDING: FMenuListItem<string>[] = [
+export const MENU_ITEMS_LANDING: FMenuListItem[] = [
   {
     label: "Sobre",
     path: "/sobre",

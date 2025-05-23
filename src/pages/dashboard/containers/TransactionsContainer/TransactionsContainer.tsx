@@ -41,13 +41,17 @@ export default function TransactionsContainer({
       type: transaction.type,
       formattedDate: formatDate(transaction.date),
       formattedValue: formatCurrency(transaction.value, transaction.currency),
+      fileName: transaction.fileName,
     })
   );
 
   const openEditModal = (transactionId: string) => {
-    const transaction = transactions.find(({ id }) => id === transactionId) || null;
-    setCurrentTransaction(transaction);
-    setIsModalOpen(true);
+    const transaction =
+      transactions.find(({ id }) => id === transactionId) || null;
+    if (transaction) {
+      setCurrentTransaction(transaction);
+      setIsModalOpen(true);
+    }
   };
 
   return (

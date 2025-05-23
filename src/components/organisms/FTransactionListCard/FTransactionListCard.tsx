@@ -43,7 +43,7 @@ export function FTransactionListCard({
   }, [transactionItems, filterTypes]);
 
   return (
-    <FCard options={{ sx: { height: "700px" } }}>
+    <FCard options={{ sx: { minHeight: "700px" } }}>
       <Stack
         direction="row"
         justifyContent="space-between"

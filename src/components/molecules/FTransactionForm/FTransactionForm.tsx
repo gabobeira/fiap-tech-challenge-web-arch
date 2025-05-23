@@ -37,7 +37,9 @@ export function FTransactionForm({
   const [transactionValue, setTransactionValue] = useState<number>(
     currentTransaction?.value || 0
   );
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(
+    currentTransaction?.fileName || null
+  );
   const [fileBase64, setFileBase64] = useState<string | null>(null);
 
   const isAddValueAccount = ["Depósito", "Empréstimo"].includes(
@@ -208,7 +210,7 @@ export function FTransactionForm({
             onChange={handleInputTransactionValue}
           />
           <FInputFile
-            innerText="Anexar comprovante"
+            innerText={fileName ?? "Anexar comprovante"}
             onUploadFile={onUploadFile}
           />
           <FButton
