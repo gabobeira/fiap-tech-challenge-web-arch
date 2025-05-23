@@ -23,7 +23,7 @@ export function FTransactionList({
     setPage(newPage);
   };
 
-  const paginatedItems = transactionItems
+  const paginatedItems = [...transactionItems]
     .reverse()
     .slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
