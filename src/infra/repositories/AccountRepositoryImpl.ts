@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AccountRepository } from "@/domain/repositories/AccountRepository";
 import { AccountData } from "@/domain/types/AccountTypes";
 import { AuthController } from "@/presentation/controllers/AuthController";
-import { Observable, from, switchMap, throwError, map, catchError } from "rxjs";
+import { Observable, catchError, from, map, switchMap, throwError } from "rxjs";
 
 export class AccountRepositoryImpl implements AccountRepository {
   private readonly baseUrl: string = "http://localhost:5000";
@@ -34,7 +35,9 @@ export class AccountRepositoryImpl implements AccountRepository {
         return from(res.json());
       }),
       map((res: any) => {
-        const result = res.data.find((resp: AccountData) => resp.idUser === idUser);
+        const result = res.data.find(
+          (resp: AccountData) => resp.idUser === idUser
+        );
         if (!result) {
           throw new Error("Conta não encontrada");
         }
