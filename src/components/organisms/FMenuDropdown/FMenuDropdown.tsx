@@ -8,15 +8,16 @@ interface FMenuDropdownProps {
   menuItems?: {
     label: string;
     path: string;
+    view: string;
     current?: boolean;
   }[];
-  children: React.ReactElement;
+  itemClick: (path: string) => void;
 }
 
 export function FMenuDropdown({
   options,
   menuItems,
-  children,
+  itemClick,
 }: FMenuDropdownProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -53,7 +54,7 @@ export function FMenuDropdown({
             sx: { minWidth: "172px", padding: 2 },
           }}
         >
-          <FMenuList menuItems={menuItems}>{children}</FMenuList>
+          <FMenuList menuItems={menuItems} itemClick={itemClick} />
         </Menu>
       )}
     </Box>

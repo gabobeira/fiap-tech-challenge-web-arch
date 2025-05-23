@@ -38,7 +38,7 @@ export function FInput({
             sx: {
               textAlign: textposition,
               borderRadius: "8px",
-              color: "var(--mui-palette-primary-constrastText)",
+              color: "var(--mui-palette-primary-dark)",
               borderColor: "var(--mui-palette-primary-main)",
               backgroundColor: "#FFFFFF",
               boxShadow: "none",

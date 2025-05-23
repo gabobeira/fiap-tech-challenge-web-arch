@@ -8,28 +8,28 @@ import {
   useTheme,
 } from "@mui/material";
 
-export type FMenuListItem<T> = {
+export type FMenuListItem = {
   label: string;
   path: string;
-  view: T;
+  view: string;
   current?: boolean;
 };
 
 type MenuVariant = "column" | "row";
 
-interface FMenuListProps<T> {
+export interface FMenuListProps {
   options?: MenuListProps;
   variant?: MenuVariant;
-  menuItems: FMenuListItem<T>[];
-  itemClick: (path: T) => void;
+  menuItems: FMenuListItem[];
+  itemClick: (path: string) => void;
 }
 
-export function FMenuList<T>({
+export function FMenuList({
   options,
   variant = "column",
   menuItems,
   itemClick,
-}: FMenuListProps<T>) {
+}: FMenuListProps) {
   const isDarkTheme = useTheme().palette.mode === "dark";
 
   return (

@@ -10,6 +10,7 @@ export interface TransactionItem {
   type: string;
   formattedDate: string;
   formattedValue: string;
+  fileName?: string;
 }
 
 export interface FTransactionItemProps
@@ -17,9 +18,10 @@ export interface FTransactionItemProps
     FTransactionActionProps {}
 
 export function FTransactionItem({
-  formattedDate,
   type,
+  formattedDate,
   formattedValue,
+  fileName,
   onEdit,
   onDelete,
 }: FTransactionItemProps) {
@@ -33,13 +35,9 @@ export function FTransactionItem({
         <Typography variant="body1" fontWeight={600}>
           {formattedValue}
         </Typography>
+        <Typography variant="body1">{fileName}</Typography>
       </Grid>
-      <Grid
-        size={2}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Grid size={2} display="flex" alignItems="center" justifyContent="center">
         <FTransactionAction
           onEdit={onEdit}
           onDelete={onDelete}

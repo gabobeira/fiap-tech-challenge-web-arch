@@ -1,9 +1,7 @@
-import { DashboardView } from "@/constants/menuItems";
 import { AccountData } from "@/domain/types/AccountTypes";
 import { TransactionData } from "@/domain/types/TransactionTypes";
 import { create } from "zustand";
 
-type DashboardViewState = DashboardView;
 type AccountState = AccountData;
 type TransactionsState = TransactionData[];
 
@@ -11,7 +9,7 @@ type AccountStoreState = {
   account: AccountState;
   transactions: TransactionsState;
   isBalanceVisible: boolean;
-  dashboardView: DashboardViewState;
+  dashboardView: string;
   sessionExpired: boolean;
 };
 
@@ -19,7 +17,7 @@ type AccountStore = AccountStoreState & {
   setAccount: (account: AccountState) => void;
   setTransactions: (transactions: TransactionsState) => void;
   toggleBalanceVisibility: () => void;
-  setDashboardView: (view: DashboardViewState) => void;
+  setDashboardView: (view: string) => void;
   setSessionExpired: (sessionExpired: boolean) => void;
 };
 
@@ -49,6 +47,6 @@ export const useAccountStore = create<AccountStore>((set) => ({
   setTransactions: (transactions: TransactionsState) => set({ transactions }),
   toggleBalanceVisibility: () =>
     set((state) => ({ isBalanceVisible: !state.isBalanceVisible })),
-  setDashboardView: (view: DashboardViewState) => set({ dashboardView: view }),
+  setDashboardView: (view: string) => set({ dashboardView: view }),
   setSessionExpired: (sessionExpired: boolean) => set({ sessionExpired }),
 }));

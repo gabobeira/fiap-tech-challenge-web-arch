@@ -2,7 +2,7 @@
 import { FAlert, FHeader, FMenuDropdown } from "@/components";
 
 import { FCard, FMenuList } from "@/components";
-import { DashboardView, MENU_ITEMS_DASHBOARD } from "@/constants/menuItems";
+import { MENU_ITEMS_DASHBOARD } from "@/constants/menuItems";
 import {
   TransactionData,
   TransactionForm,
@@ -120,9 +120,12 @@ export default function Dashboard() {
             <Box>
               <FMenuDropdown
                 options={{ sx: { display: { xs: "flex", lg: "none" } } }}
-              >
-                <Link href="" />
-              </FMenuDropdown>
+                menuItems={MENU_ITEMS_DASHBOARD.map((item) => ({
+                  ...item,
+                  current: item.view === dashboardView,
+                }))}
+                itemClick={(view) => setDashboardView(view)}
+              />
             </Box>
           }
           rightContent={
@@ -149,7 +152,7 @@ export default function Dashboard() {
                 }}
                 customPadding="12px"
               >
-                <FMenuList<DashboardView>
+                <FMenuList
                   menuItems={MENU_ITEMS_DASHBOARD.map((item) => ({
                     ...item,
                     current: item.view === dashboardView,
@@ -160,8 +163,6 @@ export default function Dashboard() {
             </Grid>
             {dashboardView === "summary" ? <AccountSummaryContainer /> : null}
 
-            {dashboardView === "investments" ? <InvestmentsContainer /> : null}
-
             {dashboardView === "transactions" ? (
               <TransactionsContainer
                 submitAddTransaction={submitAddTransaction}
@@ -169,6 +170,8 @@ export default function Dashboard() {
                 submitDeleteTransaction={submitDeleteTransaction}
               />
             ) : null}
+
+            {dashboardView === "investments" ? <InvestmentsContainer /> : null}
           </Grid>
         </Container>
       </main>
