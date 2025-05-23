@@ -6,6 +6,7 @@ import { FSelectInput } from "@/components/atoms/FSelectInput/FSelectInput";
 import {
   TransactionData,
   TransactionForm,
+  TransactionType,
 } from "@/domain/types/TransactionTypes";
 import { AlertColor, Box, SelectChangeEvent, Stack } from "@mui/material";
 import { useState } from "react";
@@ -30,7 +31,7 @@ export function FTransactionForm({
   closeEditModal,
   buttonText,
 }: FTransactionFormProps) {
-  const [transactionType, setTransactionType] = useState<string>(
+  const [transactionType, setTransactionType] = useState<TransactionType | "">(
     currentTransaction?.type || ""
   );
   const [transactionValue, setTransactionValue] = useState<number>(
@@ -51,7 +52,7 @@ export function FTransactionForm({
   const [alertOpen, setAlertOpen] = useState(false);
 
   const handleSelectTransactionType = (event: SelectChangeEvent) => {
-    setTransactionType(event.target.value);
+    setTransactionType(event.target.value as TransactionType);
     setTransactionValue(0);
   };
 
@@ -70,7 +71,12 @@ export function FTransactionForm({
   };
 
   const handleEditTransaction = (): void => {
-    if (!currentTransaction || !editTransaction) {
+    if (
+      !currentTransaction ||
+      !editTransaction ||
+      !transactionType ||
+      !transactionValue
+    ) {
       return;
     }
 
@@ -88,7 +94,7 @@ export function FTransactionForm({
   };
 
   const handleAddTransaction = (): void => {
-    if (!addTransaction) {
+    if (!addTransaction || !transactionType || !transactionValue) {
       return;
     }
 

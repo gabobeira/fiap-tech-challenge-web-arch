@@ -1,12 +1,9 @@
-export const TRANSACTION_TYPES = [
+import { TransactionType } from "@/domain/types/TransactionTypes";
+
+export const TRANSACTION_TYPES: TransactionType[] = [
   "Depósito",
   "Saque",
   "Transferência",
   "Pagamento",
-  "Investimento",
   "Empréstimo",
-  "Financiamento",
-  "Câmbio de moeda",
-  "DOC/TED",
-  "PIX",
 ];
