@@ -1,4 +1,4 @@
-import { TRANSACTION_TYPES } from "@/components/atoms/FSelectInput/FSelectInput.constants";
+import { TRANSACTION_TYPES } from "@/constants/transactionTypes";
 import { create } from "zustand";
 
 interface TransactionFilterState {

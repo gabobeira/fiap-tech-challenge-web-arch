@@ -12,7 +12,7 @@ import { AuthController } from "@/presentation/controllers/AuthController";
 import { TransactionController } from "@/presentation/controllers/TransactionController";
 import { useAccountStore } from "@/stores/AccountStore";
 import ThemeProviderWrapper from "@/theme/ThemeProviderWrapper";
-import { AccountCircle } from "@mui/icons-material";
+import { Logout } from "@mui/icons-material";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import Head from "next/head";
 import Link from "next/link";
@@ -136,7 +136,7 @@ export default function Dashboard() {
                 style={{ display: "flex" }}
                 onClick={handleLogout}
               >
-                <AccountCircle color="secondary" sx={{ fontSize: 40 }} />
+                <Logout color="secondary" sx={{ fontSize: 32 }} />
               </Link>
             </Box>
           }

@@ -1,3 +1,4 @@
+import { TRANSACTION_TYPES } from "@/constants/transactionTypes";
 import {
   FormControl,
   FormControlProps,
@@ -7,7 +8,6 @@ import {
   SelectChangeEvent,
   SelectProps,
 } from "@mui/material";
-import { TRANSACTION_TYPES } from "./FSelectInput.constants";
 
 interface SelectInputProps {
   formControlOptions?: FormControlProps;
